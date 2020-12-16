@@ -3,7 +3,8 @@ from werkzeug.utils import secure_filename
 from hypermarket.admin.forms import LoginForm
 from hypermarket.login_required import login_required
 
-admin_bp = Blueprint('admin', __name__, template_folder='templates')
+admin_bp = Blueprint('admin', __name__, template_folder='templates', static_folder='static')
+
 
 
 def check_authentication(username, password):
@@ -30,7 +31,7 @@ def login():
                     return redirect(url_for('admin.dashboard'))
 
                 else:
-                    flash('USERNAME OR PASSWORD IS WRONG')
+                    flash('نام کاریری یا رمز غبور اشتباه میباشد')
                     return render_template('admin/login.html', form=login_form)
 
 

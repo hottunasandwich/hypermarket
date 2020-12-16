@@ -1,11 +1,25 @@
-<title>{% block title %}{% endblock %}</title>
-{% block content %}{% endblock %}
-{% block flash %}
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        {% for message in messages %}
-            {{ message }}
-        {% endfor %}
-    {% endif %}
-{% endwith %}
-{% endblock %}
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{{url_for('admin.static', filename='css/main.css')}}">
+</head>
+<div dir="rtl" class="text-right">
+    {% block navbar %}{% endblock %}
+    {% block content %}{% endblock %}
+
+    {% block flash %}
+    {% with messages = get_flashed_messages() %}
+    {% for message in messages %}
+    <div class="w-50 mt-3" style="margin: auto;">
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ message }}
+    </div>
+    </div>
+    {% endfor %}
+    {% endwith %}
+    {% endblock %}
+</div>
