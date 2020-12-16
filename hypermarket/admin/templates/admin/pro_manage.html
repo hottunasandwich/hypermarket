@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block title %}مديريت كالا‌ها{% endblock %}
+
+{% block content %}
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+</head>
+
+<body lang="fa" dir="rtl">
+<nav class="navbar navbar-light bg-light p-3">
+    <h1>پنل مديريت فروشگاه</h1>
+    <div class="d-flex justify-content-start">
+        <a class="btn btn-secondary m-1" href="{{ url_for('admin.product_manage') }}" role="button">كالا ها</a>
+        <a class="btn btn-secondary m-1" href="{{ url_for('admin.inventory_manage') }}" role="button">انبارها</a>
+        <a class="btn btn-secondary m-1" href="#" role="button">موجودي و قيمت</a>
+        <a class="btn btn-secondary m-1" href="#" role="button">سفارش ها</a>
+        <a style="text-decoration: none; margin: 9px 200px 0px 3px;" href="#" role="button">بازگشت به سايت</a>
+    </div>
+</nav>
+<div class="row mb-5">
+    <div class="col-11 m-auto mt-4 d-flex justify-content-end">
+        <h3 class="ms-auto p-2 bd-highlight">مديريت كالا‌‌ها:</h3>
+        <a class="btn btn-outline-success m-3" href="#" role="button">import</a>
+        <a class="btn btn-outline-secondary m-3" href="#" role="button">افزودن كالا</a>
+    </div>
+</div>
+<style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td, th {
+      text-align: center;
+      border: 1px solid #dddddd;
+      padding: 8px;
+    }
+
+
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+
+
+</style>
+<div class="col-11 m-auto">
+    <table>
+        <tr>
+            <th>تصوير</th>
+            <th>نام‌كالا</th>
+            <th>دسته‌بندي</th>
+            <th colspan="1"></th>
+        </tr>
+        {% for product in products %}
+        <tr>
+            <td>{{ product[0] }}</td>
+            <td>{{ product[1] }}</td>
+            <td>{{ product[2] }}</td>
+            <td><a href="#">ويرايش</a> &nbsp; &nbsp; <a href="#">حذف</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+</body>
+
+{% endblock %}
