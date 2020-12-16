@@ -23,7 +23,7 @@
 <div class="row mb-5">
     <div class="col-11 m-auto mt-4 d-flex justify-content-end">
         <h3 class="ms-auto p-2 bd-highlight">مديريت كالا‌‌ها:</h3>
-        <a class="btn btn-outline-success m-3" href="#" role="button">import</a>
+        <a class="btn btn-outline-success m-3" href="{{ url_for('admin.uploads') }}" role="button">import</a>
         <a class="btn btn-outline-secondary m-3" href="#" role="button">افزودن كالا</a>
     </div>
 </div>
@@ -52,7 +52,7 @@
             <th>تصوير</th>
             <th>نام‌كالا</th>
             <th>دسته‌بندي</th>
-            <th colspan="1"></th>
+            <th></th>
         </tr>
         {% for product in products %}
         <tr>

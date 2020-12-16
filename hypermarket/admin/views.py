@@ -1,4 +1,5 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash, current_app, session
+from werkzeug.utils import secure_filename
 from hypermarket.admin.forms import LoginForm
 from hypermarket.login_required import login_required
 
@@ -53,3 +54,21 @@ def product_manage():
 def inventory_manage():
     inventories = ['انبار شماره1', 'انبار شماره2', 'انبار شماره3', 'انبار شماره4']
     return render_template('admin/inv_manage.html', inventories=inventories)
+
+
+@admin_bp.route('/upload')
+@login_required
+def uploads():
+    return render_template('admin/upload.html')
+
+
+@admin_bp.route('/uploader', methods=['GET', 'POST'])
+@login_required
+def upload():
+    if request.method == 'POST':
+        f = request.files['file']
+        try:
+            f.save("uploads/" + secure_filename(f.filename))
+            return render_template('admin/upload.html')
+        finally:
+            return redirect(url_for('admin.product_manage'))
