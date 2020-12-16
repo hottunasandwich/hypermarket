@@ -4,5 +4,5 @@ from wtforms.validators import required
 from flask_wtf import FlaskForm
 
 class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[required()])
-    password = PasswordField('Password', validators=[required()])
+    username = StringField('نام کاریری', validators=[required()])
+    password = PasswordField('رمز عبور', validators=[required()])
