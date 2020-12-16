@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}داشبورد مديريت{% endblock %}
+{% block title %}مديريت انبارها{% endblock %}
 
 {% block content %}
 <head>
@@ -20,18 +20,45 @@
         <a style="text-decoration: none; margin: 9px 200px 0px 3px;" href="#" role="button">بازگشت به سايت</a>
     </div>
 </nav>
+<div class="row mb-5">
+    <div class="col-11 m-auto mt-4 d-flex justify-content-end">
+        <h3 class="ms-auto p-2 bd-highlight">مديريت انبار‌ها:</h3>
+        <a class="btn btn-outline-secondary m-3" href="#" role="button">افزودن انبار</a>
+    </div>
+</div>
 <style>
-    .back {
-        text-shadow: 2px 5px 30px #000000;
-        transform: rotate(0.06turn);
+    table {
+      border-collapse: collapse;
+      width: 100%;
     }
-    .back h1 {
-        font-weight: bold;
-        margin-top: 28%
+
+    td, th {
+      text-align: center;
+      border: 1px solid #dddddd;
+      padding: 8px;
     }
+
+
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+
+
 </style>
-<div class="col-6 m-auto d-block text-center back" dir="ltr">
-    <h1 class="display-1 text-light font-weight-bold">d a s h b o a r d</h1>
+<div class="col-5 m-auto">
+    <table>
+        <tr>
+            <th>نام انبار</th>
+            <th></th>
+        </tr>
+        {% for inventory in inventories %}
+        <tr>
+            <td>{{ inventory }}</td>
+            <td><a href="#">ويرايش</a> &nbsp;&nbsp; <a href="#">حذف</a></td>
+        </tr>
+        {% endfor %}
+    </table>
 </div>
 </body>
+
 {% endblock %}

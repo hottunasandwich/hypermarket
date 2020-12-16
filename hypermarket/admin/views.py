@@ -2,16 +2,13 @@ from flask import Blueprint, request, render_template, redirect, url_for, flash,
 from hypermarket.admin.forms import LoginForm
 from hypermarket.login_required import login_required
 
-admin_bp = Blueprint(
-    'admin',
-    __name__,
-    template_folder='templates'
-)
+admin_bp = Blueprint('admin', __name__, template_folder='templates')
 
 
 def check_authentication(username, password):
     # TODO: add database of admins
     return {username: password} in current_app.config.get('ADMIN')
+
 
 @admin_bp.route('/login', methods=['POST', 'GET'])
 def login():
@@ -40,3 +37,19 @@ def login():
 @login_required
 def dashboard():
     return render_template('admin/dashboard.html')
+
+
+@admin_bp.route('/product_manage')
+@login_required
+def product_manage():
+    products = [['', 'چاي گلستان 400 گرمي', 'مواد غذايي'],
+                ['', 'چاي گلستان 400 گرمي', 'مواد غذايي'],
+                ['', 'چاي گلستان 400 گرمي', 'مواد غذايي']]
+    return render_template('admin/pro_manage.html', products=products)
+
+
+@admin_bp.route('/inventory_manage')
+@login_required
+def inventory_manage():
+    inventories = ['انبار شماره1', 'انبار شماره2', 'انبار شماره3', 'انبار شماره4']
+    return render_template('admin/inv_manage.html', inventories=inventories)

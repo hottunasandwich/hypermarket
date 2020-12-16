@@ -1,6 +1,7 @@
 from flask import Flask
 import os
 
+
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
@@ -15,7 +16,7 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    #register blueprints here
+    # register blueprints here
     from hypermarket.admin.views import admin_bp
 
     app.register_blueprint(admin_bp, url_prefix='/admin')
