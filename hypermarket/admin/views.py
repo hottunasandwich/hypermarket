@@ -73,3 +73,6 @@ def upload():
             return render_template('admin/upload.html')
         finally:
             return redirect(url_for('admin.product_manage'))
+
+#######################################################################
+print("salam dostan. test1 tashak")
