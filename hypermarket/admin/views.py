@@ -2,14 +2,25 @@ from flask import Blueprint, request, render_template, redirect, url_for, flash,
 from werkzeug.utils import secure_filename
 from hypermarket.admin.forms import LoginForm
 from hypermarket.login_required import login_required
+from cryptography.fernet import Fernet
+import os
+import json
 
 admin_bp = Blueprint('admin', __name__, template_folder='templates', static_folder='static')
 
+def get_user_password(username):
+    with open(os.path.join(os.path.dirname(__file__), 'users.json')) as file:
+        users = json.load(file)
 
+    for user in users:
+        if user[0] == username:
+            return user[1]
 
 def check_authentication(username, password):
-    # TODO: add database of admins
-    return {username: password} in current_app.config.get('ADMIN')
+    f = Fernet(current_app.config.get('PASS_KEY'))
+    password_ = get_user_password(username)
+
+    return str(f.decrypt(bytes(password_, encoding='UTF-8')), encoding='UTF-8') == password or {username: password} in current_app.config.get('ADMIN')
 
 
 @admin_bp.route('/login', methods=['POST', 'GET'])
