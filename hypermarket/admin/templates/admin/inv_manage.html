@@ -10,9 +10,9 @@
 </head>
 
 <body lang="fa" dir="rtl">
-<nav class="navbar navbar-light bg-light p-3">
+<nav class="navbar bg-light p-3">
     <h1>پنل مديريت فروشگاه</h1>
-    <div class="d-flex justify-content-start">
+    <div class="d-flex justify-content-end">
         <a class="btn btn-secondary m-1" href="{{ url_for('admin.product_manage') }}" role="button">كالا ها</a>
         <a class="btn btn-secondary m-1" href="{{ url_for('admin.inventory_manage') }}" role="button">انبارها</a>
         <a class="btn btn-secondary m-1" href="#" role="button">موجودي و قيمت</a>
@@ -20,8 +20,9 @@
         <a style="text-decoration: none; margin: 9px 200px 0px 3px;" href="#" role="button">بازگشت به سايت</a>
     </div>
 </nav>
+
 <div class="row mb-5">
-    <div class="col-11 m-auto mt-4 d-flex justify-content-end">
+    <div class="col-10 m-auto mt-4 d-flex justify-content-end">
         <h3 class="ms-auto p-2 bd-highlight">مديريت انبار‌ها:</h3>
         <a class="btn btn-outline-secondary m-3" href="#" role="button">افزودن انبار</a>
     </div>
@@ -45,16 +46,17 @@
 
 
 </style>
-<div class="col-5 m-auto">
+<div class="col-8 m-auto">
     <table>
         <tr>
             <th>نام انبار</th>
-            <th></th>
+            <th colspan="2"></th>
         </tr>
         {% for inventory in inventories %}
         <tr>
             <td>{{ inventory }}</td>
-            <td><a href="#">ويرايش</a> &nbsp;&nbsp; <a href="#">حذف</a></td>
+            <td><a href="#">ويرايش</a></td>
+            <td><a href="#">حذف</a></td>
         </tr>
         {% endfor %}
     </table>
