@@ -75,4 +75,4 @@ def upload():
             return redirect(url_for('admin.product_manage'))
 
 #######################################################################
-print("salam dostan. test1 tashak")
+# print("salam dostan. test1 tashak")
