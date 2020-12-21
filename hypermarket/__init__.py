@@ -17,7 +17,7 @@ def create_app(test_config=None):
         pass
 
     # register blueprints here
-    from .admin.views import admin_bp
+    from hypermarket.admin.views import admin_bp
     ####### line 20 ro eslah kardam
 
     app.register_blueprint(admin_bp, url_prefix='/admin')
