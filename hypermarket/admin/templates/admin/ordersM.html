@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}داشبورد مديريت{% endblock %}
+{% block title %}مديريت سفارش‌ها{% endblock %}
 
 {% block content %}
 <head>
@@ -18,26 +18,13 @@
         <a type="button" class="btn btn-secondary px-4" href="{{ url_for('admin.inventory_price_manage') }}">موجودي و قيمت</a>
         <a type="button" class="btn btn-secondary px-4" href="{{ url_for('admin.inventory_manage') }}">انبارها</a>
         <a type="button" class="btn btn-secondary px-4" href="{{ url_for('admin.product_manage') }}">كالاها</a>
-      </div>
+    </div>
     <a class="text-decoration-none ml-2" href="#">بازگشت‌ به سايت <i class="fa fa-home"></i></a>
 </nav>
-<style>
-    .back {
-        text-shadow: 2px 5px 30px #000000;
-        transform: rotate(0.06turn);
-    }
-    .back h1 {
-        font-weight: bold;
-        margin-top: 20%;
-    }
-
-</style>
-<div class="col-8 m-auto d-block text-center back" dir="ltr">
-    <h1 class="display-3 text-light font-weight-bold">d a s h b o a r d</h1>
+<div>
+    <div class="col-11 m-4 d-flex justify-content-end">
+        <h3 class="ms-auto mr-4 p-2">مديريت سفارش‌ها:</h3>
+    </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-</body>
 {% endblock %}
