@@ -56,12 +56,12 @@ def dashboard():
 @login_required
 def product_manage():
     products = [[
-                    'https://dkstatics-public.digikala.com/digikala-products/115604447.jpg?x-oss-process=image/resize,h_1600/quality,q_80',
-                    'چاي گلستان 400 گرمي', 'مواد غذايي'],
-                [
-                    'https://dkstatics-public.digikala.com/digikala-products/115604447.jpg?x-oss-process=image/resize,h_1600/quality,q_80',
-                    'چاي گلستان 400 گرمي', 'مواد غذايي'],
-                ['', 'چاي گلستان 400 گرمي', 'مواد غذايي']]
+        'https://dkstatics-public.digikala.com/digikala-products/115604447.jpg?x-oss-process=image/resize,h_1600/quality,q_80',
+        'چاي گلستان 400 گرمي', 'مواد غذايي'],
+        [
+            'https://dkstatics-public.digikala.com/digikala-products/115604447.jpg?x-oss-process=image/resize,h_1600/quality,q_80',
+            'چاي گلستان 400 گرمي', 'مواد غذايي'],
+        ['', 'چاي گلستان 400 گرمي', 'مواد غذايي']]
     return render_template('admin/productM.html', products=products)
 
 
