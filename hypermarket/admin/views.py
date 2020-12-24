@@ -55,10 +55,14 @@ def dashboard():
 @admin_bp.route('/product_manage')
 @login_required
 def product_manage():
-    products = [['', 'چاي گلستان 400 گرمي', 'مواد غذايي'],
-                ['', 'چاي گلستان 400 گرمي', 'مواد غذايي'],
+    products = [[
+                    'https://dkstatics-public.digikala.com/digikala-products/115604447.jpg?x-oss-process=image/resize,h_1600/quality,q_80',
+                    'چاي گلستان 400 گرمي', 'مواد غذايي'],
+                [
+                    'https://dkstatics-public.digikala.com/digikala-products/115604447.jpg?x-oss-process=image/resize,h_1600/quality,q_80',
+                    'چاي گلستان 400 گرمي', 'مواد غذايي'],
                 ['', 'چاي گلستان 400 گرمي', 'مواد غذايي']]
-    return render_template('admin/pro_manage.html', products=products)
+    return render_template('admin/productM.html', products=products)
 
 
 @admin_bp.route('/inventory_manage')
@@ -67,6 +71,17 @@ def inventory_manage():
     inventories = ['انبار شماره1', 'انبار شماره2', 'انبار شماره3', 'انبار شماره4']
     return render_template('admin/inv_manage.html', inventories=inventories)
 
+
+@admin_bp.route('/orders_manage')
+@login_required
+def orders_manage():
+    return render_template('admin/ordersM.html')
+
+
+@admin_bp.route('/inventory_price_manage')
+@login_required
+def inventory_price_manage():
+    return render_template('admin/inventory_priceM.html')
 
 @admin_bp.route('/upload')
 @login_required
