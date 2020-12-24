@@ -18,9 +18,11 @@ def create_app(test_config=None):
 
     # register blueprints here
     from hypermarket.admin.views import admin_bp
+    from hypermarket.store.views import store_bp
     ####### line 20 ro eslah kardam
 
     app.register_blueprint(admin_bp, url_prefix='/admin')
+    app.register_blueprint(store_bp, url_prefix='/')
 
     return app
 
