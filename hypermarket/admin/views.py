@@ -85,5 +85,10 @@ def upload():
         finally:
             return redirect(url_for('admin.product_manage'))
 
+@admin_bp.route('/logout')
+@login_required
+def logout():
+    session.pop('user', None)
+    return redirect(url_for('admin.login'))
 #######################################################################
 # print("salam dostan. test1 tashak")
