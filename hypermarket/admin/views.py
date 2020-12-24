@@ -8,7 +8,6 @@ import json
 
 admin_bp = Blueprint('admin', __name__, template_folder='templates', static_folder='static')
 
-
 def get_user_password(username):
     with open(os.path.join(os.path.dirname(__file__), 'users.json')) as file:
         users = json.load(file)
@@ -17,13 +16,11 @@ def get_user_password(username):
         if user[0] == username:
             return user[1]
 
-
 def check_authentication(username, password):
     f = Fernet(current_app.config.get('PASS_KEY'))
     password_ = get_user_password(username)
 
-    return str(f.decrypt(bytes(password_, encoding='UTF-8')), encoding='UTF-8') == password or {
-        username: password} in current_app.config.get('ADMIN')
+    return str(f.decrypt(bytes(password_, encoding='UTF-8')), encoding='UTF-8') == password or {username: password} in current_app.config.get('ADMIN')
 
 
 @admin_bp.route('/login', methods=['POST', 'GET'])
@@ -58,33 +55,23 @@ def dashboard():
 @admin_bp.route('/product_manage')
 @login_required
 def product_manage():
-    products = [[
-                    'https://dkstatics-public.digikala.com/digikala-products/115604447.jpg?x-oss-process=image/resize,h_1600/quality,q_80',
-                    'چاي گلستان 400 گرمي', 'مواد غذايي'],
-                [
-                    'https://dkstatics-public.digikala.com/digikala-products/115604447.jpg?x-oss-process=image/resize,h_1600/quality,q_80',
-                    'چاي گلستان 400 گرمي', 'مواد غذايي'],
+    products = [['', 'چاي گلستان 400 گرمي', 'مواد غذايي'],
+                ['', 'چاي گلستان 400 گرمي', 'مواد غذايي'],
                 ['', 'چاي گلستان 400 گرمي', 'مواد غذايي']]
-    return render_template('admin/productM.html', products=products)
+    return render_template('admin/pro_manage.html', products=products)
 
 
 @admin_bp.route('/inventory_manage')
 @login_required
 def inventory_manage():
     inventories = ['انبار شماره1', 'انبار شماره2', 'انبار شماره3', 'انبار شماره4']
-    return render_template('admin/warehouseM.html', inventories=inventories)
+    return render_template('admin/inv_manage.html', inventories=inventories)
 
 
-@admin_bp.route('/orders_manage')
+@admin_bp.route('/upload')
 @login_required
-def orders_manage():
-    return render_template('admin/ordersM.html')
-
-
-@admin_bp.route('/inventory_price_manage')
-@login_required
-def inventory_price_manage():
-    return render_template('admin/inventory_priceM.html')
+def uploads():
+    return render_template('admin/upload.html')
 
 
 @admin_bp.route('/uploader', methods=['GET', 'POST'])
@@ -98,5 +85,10 @@ def upload():
         finally:
             return redirect(url_for('admin.product_manage'))
 
+@admin_bp.route('/logout')
+@login_required
+def logout():
+    session.pop('user', None)
+    return redirect(url_for('admin.login'))
 #######################################################################
 # print("salam dostan. test1 tashak")
