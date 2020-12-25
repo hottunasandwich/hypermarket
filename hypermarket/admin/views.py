@@ -69,7 +69,7 @@ def product_manage():
 @login_required
 def inventory_manage():
     inventories = ['انبار شماره1', 'انبار شماره2', 'انبار شماره3', 'انبار شماره4']
-    return render_template('admin/inv_manage.html', inventories=inventories)
+    return render_template('admin/warehouseM.html', inventories=inventories)
 
 
 @admin_bp.route('/orders_manage')
@@ -105,5 +105,3 @@ def upload():
 def logout():
     session.pop('user', None)
     return redirect(url_for('admin.login'))
-#######################################################################
-# print("salam dostan. test1 tashak")
