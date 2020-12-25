@@ -2,33 +2,12 @@
 {% block title %}مديريت موجودي ‌و قيمت‌ها{% endblock %}
 
 {% block content %}
-<head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-</head>
 
-<body lang="fa" dir="rtl">
-<nav class="navbar navbar-light bg-light p-3">
-    <h1 class="font-weight-bold">پنل مديريت فروشگاه</h1>
-    <div class="btn-group" role="group" dir="ltr">
-        <a type="button" class="btn btn-secondary px-4" href="{{ url_for('admin.orders_manage') }}">سفارش‌ها</a>
-        <a type="button" class="btn btn-secondary px-4" href="{{ url_for('admin.inventory_price_manage') }}">موجودي و قيمت</a>
-        <a type="button" class="btn btn-secondary px-4" href="{{ url_for('admin.inventory_manage') }}">انبارها</a>
-        <a type="button" class="btn btn-secondary px-4" href="{{ url_for('admin.product_manage') }}">كالاها</a>
-      </div>
-    <a class="text-decoration-none ml-2" href="#">بازگشت‌ به سايت <i class="fa fa-home"></i></a>
-</nav>
-<div>
-    <div class="col-11 m-4 d-flex justify-content-end">
-        <h3 class="ms-auto mr-4 p-2">مديريت موجودي و قيمت‌ها:</h3>
-        <button class="btn btn-sm btn-outline-secondary m-3">
-            افزودن موجودي
-        </button>
-
-    </div>
+<div class="col-11 m-4 d-flex justify-content-end">
+    <h3 class="ms-auto mr-4 ml-auto p-2">مديريت موجودي و قيمت‌ها:</h3>
+    <button class="btn btn-sm btn-outline-secondary m-3">
+        افزودن موجودي
+    </button>
 </div>
 
 {% endblock %}
