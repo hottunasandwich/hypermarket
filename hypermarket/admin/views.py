@@ -22,6 +22,9 @@ def check_authentication(username, password):
     f = Fernet(current_app.config.get('PASS_KEY'))
     password_ = get_user_password(username)
 
+    if password_ == None:
+        return False
+
     return str(f.decrypt(bytes(password_, encoding='UTF-8')), encoding='UTF-8') == password or {
         username: password} in current_app.config.get('ADMIN')
 
