@@ -1,10 +1,13 @@
-from flask import Blueprint, request, render_template, redirect, url_for, flash, current_app, session
+from flask import Blueprint, request, render_template, redirect, url_for, flash, current_app, session, g
 from werkzeug.utils import secure_filename
 from hypermarket.admin.forms import LoginForm
 from hypermarket.login_required import login_required
-# from cryptography.fernet import Fernet
 import os
 import json
+from ..db import get_db
+import psycopg2
+import psycopg2.extras
+# from cryptography.fernet import Fernet
 
 store_bp = Blueprint('store', __name__, template_folder='templates', static_folder='static')
 
@@ -48,20 +51,52 @@ store_bp = Blueprint('store', __name__, template_folder='templates', static_fold
 
 @store_bp.route('/')
 def home():
-    return render_template('home.html')
+    # cursor.execute("SELECT * FROM category WHERE customer_id = %s", (customer_id,))
+    # g.customer = cursor.fetchone()
+    # print(g.customer)
+    db = get_db()
+    with db:
+        # with db.cursor() as cursor:
+        #     cursor.execute("""select category_id from category where parent_group=0 """)
+        #     child_group = [i[0] for i in cursor.fetchall()]
+        
+        with db.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+            cursor.execute("select category_name,category_id from category where parent_group=0")
+            categories = [dict(row) for row in cursor.fetchall()]
+            # print(categories)
+            total_product = {}
+
+            for x in categories:
+                cursor.execute(f"""select DISTINCT ON (product_name) product_name, product_ware.product_id, price, category_name, image_link from product
+                                    join category on product.category_id=category.category_id
+                                    join product_ware on product.id=product_ware.product_id
+                                    where parent_group={x['category_id']}
+                                    order by  product_name, product_date desc, price asc
+                                    limit 4;""")
+                each_product = [dict(row) for row in cursor.fetchall()]        
+                total_product[x['category_name']] = each_product
+
+            # print(total_product.keys())    
+            # print("############################",total_product)    
+            
+    return render_template('home.html', total_product=total_product)
+    
+
+
 
 
 # print(url_for('login', next='/'))
 @store_bp.route('/category/?name=<category_name>')
 def category_selector(category_name):
     # category from data base
-    return render_template('category.html', category=category)
+    return render_template('category.html', category=category_name)
 
 
 @store_bp.route('/product/<int:product_id>')
 def product_selector(product_id):
     # product from database
-    return render_template('product.html', product=product)
+    # product=product
+    return render_template('product.html' , id=product_id )
 
 
 @store_bp.route('/cart')
