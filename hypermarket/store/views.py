@@ -48,7 +48,6 @@ store_bp = Blueprint('store', __name__, template_folder='templates', static_fold
 #                     flash('نام کاریری یا رمز غبور اشتباه میباشد')
 #                     return render_template('admin/login.html', form=login_form)
 
-
 @store_bp.route('/')
 def home():
     # cursor.execute("SELECT * FROM category WHERE customer_id = %s", (customer_id,))
@@ -56,9 +55,6 @@ def home():
     # print(g.customer)
     db = get_db()
     with db:
-        # with db.cursor() as cursor:
-        #     cursor.execute("""select category_id from category where parent_group=0 """)
-        #     child_group = [i[0] for i in cursor.fetchall()]
         
         with db.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
             cursor.execute("select category_name,category_id from category where parent_group=0")
@@ -77,26 +73,51 @@ def home():
                 total_product[x['category_name']] = each_product
 
             # print(total_product.keys())    
-            # print("############################",total_product)    
             
     return render_template('home.html', total_product=total_product)
     
 
-
-
-
 # print(url_for('login', next='/'))
 @store_bp.route('/category/?name=<category_name>')
 def category_selector(category_name):
-    # category from data base
-    return render_template('category.html', category=category_name)
+    db = get_db()
+    with db:
+        with db.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+            cursor.execute(f"select category_id from category where category_name like'%{category_name}%';")
+            category_num = cursor.fetchone()['category_id']
+            # print(category_num)
+            
+            cursor.execute(f"""select DISTINCT ON (product_name) product_name, product_ware.product_id, price, category_name, image_link from product
+                                join category on product.category_id=category.category_id
+                                join product_ware on product.id=product_ware.product_id
+                                where parent_group={category_num}
+                                order by  product_name, product_date desc, price asc;""")
+            each_product = [dict(row) for row in cursor.fetchall()]        
+      
+    return render_template('category.html', each_product=each_product , category_name=category_name)
 
 
 @store_bp.route('/product/<int:product_id>')
 def product_selector(product_id):
-    # product from database
-    # product=product
-    return render_template('product.html' , id=product_id )
+    db = get_db()
+    with db:
+        with db.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+            cursor.execute(f"""select product_name, image_link, price, description, category_name from product 
+                                join product_ware on product.id=product_ware.product_id
+                                join category on product.category_id=category.category_id
+                                where product.id={product_id} and number>0
+                                order by price asc
+                                limit 1;""")
+            product = cursor.fetchone()
+            print(product)
+
+    return render_template('product.html' , product=product )
+
+
+
+
+
+
 
 
 @store_bp.route('/cart')
