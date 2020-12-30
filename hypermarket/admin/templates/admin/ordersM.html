@@ -9,4 +9,39 @@
     </div>
 </div>
 
+
+<style>
+    td, th {
+      text-align: center;
+      border: 1px solid #dddddd;
+      padding: 8px;
+    }
+</style>
+
+<div class="col-10 mx-auto mb-5 mytable">
+</div>
+
+<div class="modal fade" id="order-modal" tabindex="-2" role="dialog">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+        <div class="modal-header p-1">
+          <h5 class="modal-title my-1 mr-2">نمايش سفارش</h5>
+            <button type="button" class="btn btn-outline-info m-0 p-1 border-0" data-dismiss="modal">
+              <i class="fa fa-times-circle" aria-hidden="true"></i> </button>
+        </div>
+        <div class="modal-body pt-0">
+            <div class="col-11 mx-auto my-2" id="order-detail"></div>
+            <div class="col-12 text-center">
+                <button type="button" class="btn btn-info px-5" data-dismiss="modal">بستن</button>
+            </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+{% block extra_script %}
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="static/js/ordersM.js"></script>
+{% endblock %}
 {% endblock %}
