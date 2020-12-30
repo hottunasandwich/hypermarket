@@ -22,8 +22,16 @@
         <h3>{{product['product_name']}}</h3>
         <br> <br> <br>
         <!-- category -->
-        <br> <br>
+        <br>
         <h1>{{product['price']}} تومان</h1>
+        <br> <br>
+        
+        <input class="number" min="1" max="{{total['sum']}}" required="required" type="number" 
+        id="num" name="number[0]">
+        <a class="btn btn-success create-action" href="#" >
+            <i class="fa fa-plus fa-lg"></i> افزودن به سبد خرید
+        </a>
+
     </div>
       <img src="{{product['image_link']}}" />
     </div>
@@ -55,10 +63,6 @@
 
     .box:hover {
       box-shadow: 3px 3px 20px black;
-      /* cursor: pointer;
-      transition: all 0.8s;
-      background-color: rgb(255, 255, 0); */
-
     }
 
     .box img {
@@ -78,7 +82,9 @@
 
     }
     </style>
-  
+
+    <script src="{{ url_for('store.static', filename='js/add_to_cart.js') }}"></script> 
+
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
       integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
       crossorigin="anonymous"></script>
@@ -88,6 +94,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
       integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
       crossorigin="anonymous"></script>
+     
   </body>
 
 

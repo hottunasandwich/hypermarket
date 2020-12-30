@@ -1,46 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0 shrink-to-fit=no"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
-      crossorigin="anonymous"
-    />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  </head>
-  <body lang="fa" dir="rtl">
-    <nav class="navbar navbar-light bg-light p-3">
-      <h1>فروشگاه سبزی</h1>
-        <div class="d-flex">
-          <a
-            class="btn btn-secondary m-1 text-blue"
-            href="{{ url_for('admin.login') }}"
-            role="button"
-            >مدیریت</a
-          >
-          <a
-            class="btn btn-secondary m-1 text-blue"
-            href="{{ url_for('store.cart_creation') }}"
-            role="button"
-            > <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-            سبد خرید</a
-          >
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0 shrink-to-fit=no" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body lang="fa" dir="rtl">
+  <nav class="navbar navbar-light bg-light p-3">
+    <h1>فروشگاه سبزی</h1>
+    <div class="d-flex">
+      <a class="btn btn-secondary m-1 text-blue" href="{{ url_for('admin.login') }}" role="button">مدیریت</a>
+      <a class="btn btn-secondary m-1 text-blue" href="{{ url_for('store.cart_creation') }}" role="button"> <i
+          class="fa fa-shopping-cart" aria-hidden="true"></i>
+        سبد خرید</a>
+    </div>
   </nav>
 
-    <div class="row mb-5">
-        <div class="col-11 m-auto mt-4 d-flex justify-content-end">
-          <h3 class="ms-auto p-2 bd-highlight">نهایی کردن خرید</h3>
-        </div>
-      </div>
-
-
+    <br><br><br><br>
     <div class="container">
     <form>
         <div class="row">
@@ -68,19 +45,22 @@
         <div class="row">
           <div class="col-6">
             <h6>تاریخ تحویل:</h6>
-            <input type="text" class="form-control" id="date" name="date">
+            <input type="text" class="form-control" id="date" name="date" value="salam aleykuuum">
           </div>
         </div>
 
     </form>
     </div>
     <br> <br>
-    <a class="d-grid col-2 mx-auto btn btn-outline-dark m-3" style="background-color: forestgreen; color: white;" href="#" role="button">ثبت نهایی سفارش</a>
-
+    <button class="d-grid col-2 mx-auto btn btn-outline-dark m-3" id="button" style="background-color: forestgreen; color: white;" type="button">ثبت نهایی سفارش</button>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>        
+    <script src="{{ url_for('static', filename='js/order_approve.js') }}"></script> 
+
   </body>
 </html>
 

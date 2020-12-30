@@ -48,6 +48,9 @@ store_bp = Blueprint('store', __name__, template_folder='templates', static_fold
 #                     flash('نام کاریری یا رمز غبور اشتباه میباشد')
 #                     return render_template('admin/login.html', form=login_form)
 
+
+
+
 @store_bp.route('/')
 def home():
     # cursor.execute("SELECT * FROM category WHERE customer_id = %s", (customer_id,))
@@ -109,26 +112,32 @@ def product_selector(product_id):
                                 order by price asc
                                 limit 1;""")
             product = cursor.fetchone()
-            print(product)
-
-    return render_template('product.html' , product=product )
-
-
-
-
-
+            cursor.execute(f"""select sum(number) from product 
+                                join product_ware on product.id=product_ware.product_id
+                                where product.id={product_id} and number>0
+                                group by product_id;""")
+            total =  cursor.fetchone()                   
+    return render_template('product.html' , product=product, total=total )
 
 
 
 @store_bp.route('/cart')
 def cart_creation():
     #****************************
+
+        # return render_template('cart_approve.html')
+
     return render_template('cart.html')
 
 
-@store_bp.route('/cart/approve')
+@store_bp.route('/cart/approve', methods=['POST', 'GET'])
 def cart_approve_function():
-    return render_template('cart_approve.html')
+    # cur.execute("INSERT INTO category (name) VALUES (%s)", (j,))
+    if request.method == 'POST':
+        a = request.form['first_name']
+        print(a)
+        
+    return redirect(url_for('home'))
 
     # if request.method == 'POST':
     #     f = request.files['file']
