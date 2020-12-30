@@ -4,7 +4,7 @@
 {% block content %}
 
 <div class="col-11 m-4 d-flex justify-content-end">
-    <h3 class="ms-auto mr-4 ml-auto p-2">مديريت انبار‌ها:</h3>
+    <h3 class="ms-auto mr-4 ml-auto p-2" id="esi">مديريت انبار‌ها:</h3>
     <button class="btn btn-sm btn-outline-secondary m-3" data-toggle="modal" data-target="#appendWH">
         افزودن انبار
     </button>
@@ -15,7 +15,7 @@
       <div class="modal-content">
         <div class="modal-header p-1">
           <h5 class="modal-title my-4">افزودن انبار:</h5>
-            <button type="button" class="btn btn-outline-secondary m-0 p-1 border-0" data-dismiss="modal">
+            <button type="button" class="btn btn-outline-info m-0 p-1 border-0" data-dismiss="modal">
               <i class="fa fa-times-circle" aria-hidden="true"></i>
             </button>
         </div>
@@ -23,15 +23,60 @@
           <form>
             <div class="form-group text-right p-3">
               <label for="nameWH">نام انبار:</label>
-              <input type="text" class="form-control border-info mb-3" id="nameWH">
+              <input type="text" class="form-control border-info mb-3" name="nameWH" id="nameWH" required>
             <div class="text-center">
-              <button type="submit" class="btn btn-secondary pb-2 px-5">ثبت‌ انبار</button>
+              <button type="submit" class="btn btn-info pb-2 px-5" id="final-add">ثبت‌ انبار</button>
             </div>
         </div>
           </form>
         </div>
       </div>
     </div>
+</div>
+
+<div class="modal fade bd-example-modal-sm" id="deleteWH" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body p-0">
+        <button type="button" class="btn btn-outline-info m-1 p-1 border-0" data-dismiss="modal">
+          <i class="fa fa-times-circle" aria-hidden="true"></i>
+        </button>
+        <p class="text-right mr-2 mb-0">با حذف اين انبار تمامي كالا‌هاي متعلق به آن نيز از ليست موجودي ها حذف مي‌شوند؛</p>
+        <p class="mr-2 mt-0 text-danger">
+          <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+          آيا از حذف اين انبار اطمينان داريد؟
+        </p>
+      </div>
+      <div class="modal-footer border-info p-1">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
+        <button type="button" class="btn btn-danger" id="final-del" data-dismiss="modal">حذف</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modifyWH" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header p-1">
+        <h5 class="modal-title my-4">ويرايش انبار</h5>
+          <button type="button" class="btn btn-outline-info m-0 p-1 border-0" data-dismiss="modal">
+            <i class="fa fa-times-circle" aria-hidden="true"></i>
+          </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group text-right">
+            <label for="nameModify">ويرايش نام انبار:</label>
+            <input type="text" class="form-control border-info mb-3" name="nameModify" id="nameModify" required>
+          <div class="text-center">
+            <button type="submit" class="btn btn-info pb-2 px-5" id="final-modify">ذخيره تغييرات</button>
+          </div>
+      </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 
 <style>
@@ -42,25 +87,11 @@
     }
 </style>
 
-<div class="col-5 mx-auto mb-5">
-    <table class="table table-striped">
-        <tr>
-            <th>نام انبار</th>
-            <th></th>
-        </tr>
-        {% for inventory in inventories %}
-        <tr>
-            <td>{{ inventory }}</td>
-            <td>
-                <a class="text-decoration-none font-weight-bold" href="#">
-                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>     ويرايش
-                </a> &nbsp; &nbsp;
-                <a class="btn btn-outline-danger border-0" href="#" role="button">
-                    <i class="fa fa-trash" aria-hidden="true"></i>
-                </a>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+<div class="col-5 mx-auto mb-5 mytable">
 </div>
+{% block extra_script %}
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="static/js/warehouseM.js"></script>
+{% endblock %}
 {% endblock %}
