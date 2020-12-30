@@ -132,12 +132,15 @@ def cart_creation():
 
 @store_bp.route('/cart/approve', methods=['POST', 'GET'])
 def cart_approve_function():
-    # cur.execute("INSERT INTO category (name) VALUES (%s)", (j,))
     if request.method == 'POST':
-        a = request.form['first_name']
-        print(a)
-        
-    return redirect(url_for('home'))
+        db = get_db()
+        with db:
+            with db.cursor() as cursor:
+                cursor.execute("""INSERT INTO orders (username,phone_number,address,order_time)
+                VALUES (%s,%s,%s,%s)""", 
+                (request.form['first_name'] +" "+ request.form['last_name'], request.form['phone'], request.form['address'], request.form['date']))
+    # return redirect(url_for('home'))
+    return render_template('cart_approve.html')
 
     # if request.method == 'POST':
     #     f = request.files['file']
