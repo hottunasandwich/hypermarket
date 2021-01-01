@@ -16,7 +16,7 @@
             <a type="button" class="btn btn-secondary px-4" href="{{ url_for('admin.warehouse_manage') }}">انبارها</a>
             <a type="button" class="btn btn-secondary px-4" href="{{ url_for('admin.product_manage') }}">كالاها</a>
         </div>
-        <a class="text-decoration-none ml-2" href="#">بازگشت‌ به سايت <i class="fa fa-home"></i></a>
+        <a class="text-decoration-none ml-2" href="{{url_for('store.home')}}">بازگشت‌ به سايت <i class="fa fa-home"></i></a>
     </nav>
     {% endblock %}
     {% block content %}{% endblock %}

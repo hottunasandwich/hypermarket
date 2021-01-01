@@ -34,7 +34,7 @@ store_bp = Blueprint('store', __name__, template_folder='templates', static_fold
 #     else:
 #         login_form = LoginForm()
 #         if request.method == 'GET':
-#             return render_template('admin/login.html', form=login_form)
+#             return render_template('store/admin/login.html', form=login_form)
 
 #         else:
 #             if login_form.validate_on_submit():
@@ -46,7 +46,7 @@ store_bp = Blueprint('store', __name__, template_folder='templates', static_fold
 
 #                 else:
 #                     flash('نام کاریری یا رمز غبور اشتباه میباشد')
-#                     return render_template('admin/login.html', form=login_form)
+#                     return render_template('store/admin/login.html', form=login_form)
 
 
 
@@ -77,7 +77,7 @@ def home():
 
             # print(total_product.keys())    
             
-    return render_template('home.html', total_product=total_product)
+    return render_template('store/home.html', total_product=total_product)
     
 
 # print(url_for('login', next='/'))
@@ -97,7 +97,7 @@ def category_selector(category_name):
                                 order by  product_name, product_date desc, price asc;""")
             each_product = [dict(row) for row in cursor.fetchall()]        
       
-    return render_template('category.html', each_product=each_product , category_name=category_name)
+    return render_template('store/category.html', each_product=each_product , category_name=category_name)
 
 
 @store_bp.route('/product/<int:product_id>')
@@ -117,7 +117,7 @@ def product_selector(product_id):
                                 where product.id={product_id} and number>0
                                 group by product_id;""")
             total =  cursor.fetchone()                   
-    return render_template('product.html' , product=product, total=total )
+    return render_template('store/product.html' , product=product, total=total )
 
 
 
@@ -125,9 +125,9 @@ def product_selector(product_id):
 def cart_creation():
     #****************************
 
-        # return render_template('cart_approve.html')
+        # return render_template('store/cart_approve.html')
 
-    return render_template('cart.html')
+    return render_template('store/cart.html')
 
 
 @store_bp.route('/cart/approve', methods=['POST', 'GET'])
@@ -140,13 +140,13 @@ def cart_approve_function():
                 VALUES (%s,%s,%s,%s)""", 
                 (request.form['first_name'] +" "+ request.form['last_name'], request.form['phone'], request.form['address'], request.form['date']))
     # return redirect(url_for('home'))
-    return render_template('cart_approve.html')
+    return render_template('store/cart_approve.html')
 
     # if request.method == 'POST':
     #     f = request.files['file']
     #     try:
     #         f.save("uploads/" + secure_filename(f.filename))
-    #         return render_template('admin/upload.html')
+    #         return render_template('store/admin/upload.html')
     #     finally:
     #         return redirect(url_for('admin.product_manage'))
 

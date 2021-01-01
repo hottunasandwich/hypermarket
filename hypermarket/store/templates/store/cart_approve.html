@@ -1,0 +1,45 @@
+{% extends 'store/base.html' %}
+{% block content %}
+<br><br><br><br>
+<div class="container">
+  <form>
+    <div class="row">
+      <div class="col">
+        <h6>نام:</h6>
+        <input type="text" class="form-control" id="first_name" placeholder="نام خود را به فارسی وارد کنید..."
+          name="first_name">
+      </div>
+      <div class="col">
+        <h6>نام خانوادگی:</h6>
+        <input type="text" class="form-control" id="last_name" placeholder="نام خانوادگی خود را به فارسی وارد کنید..."
+          name="last_name">
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col">
+        <h6>آدرس:</h6>
+        <textarea class="form-control" id="address" cols="3" rows="5"></textarea>
+      </div>
+      <div class="col">
+        <h6>تلفن همراه:</h6>
+        <input type="text" class="form-control" id="phone" placeholder="تلفن همراه..." name="phone">
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-6">
+        <h6>تاریخ تحویل:</h6>
+        <input type="text" class="form-control" id="date" name="date" value="salam aleykuuum">
+      </div>
+    </div>
+
+  </form>
+</div>
+<br> <br>
+<button class="d-grid col-2 mx-auto btn btn-outline-dark m-3" id="button"
+  style="background-color: forestgreen; color: white;" type="button">ثبت نهایی سفارش</button>
+{% endblock %}
+{% block extra_script %}
+<script src="{{ url_for('static', filename='js/order_approve.js') }}"></script>
+{% endblock %}
