@@ -1,25 +1,43 @@
 {% extends 'store/base.html' %}
-
 {% block content %}
-<h2>{{category_name}}</h2>
 
-{% for product in each_product %}
-<a class="box" id="{{product['product_id']}}"
-  href="{{url_for('store.product_selector', product_id=product['product_id'])}}">
-  <div class="title">
-    <h5>{{product['product_name']}}</h5>
-    <br> <br>
-    <h3>{{product['price']}} تومان</h3>
+<div class="row" style="margin-right: 0;">
+  <div class="col-3">
+    <ul class="px-0 pt-4">{% include 'store/sidebar_category.html' %}</ul>
   </div>
-  <img src="{{product['image_link']}}" />
-</a>
-{% endfor %}
-
+  <div class="col">
+    <h2 class="mt-3">{{category_name}}</h2>
+    <hr>
+    {% for product in each_product %}
+    <a class="box" id="{{product['product_id']}}"
+      href="{{url_for('store.product_selector', product_id=product['product_id'])}}">
+      <div class="title">
+        <h5>{{product['product_name']}}</h5>
+        <br> <br>
+        <h3>{{product['price']}} تومان</h3>
+      </div>
+      <img src="{{product['image_link']}}" />
+    </a>
+    {% endfor %}
+  </div>
+</div>
 <style>
   h5,
   h3 {
     text-align: center;
     color: teal;
+  }
+
+  li{
+    list-style-type: none;
+  }
+
+  .cat-sub {
+    font-size: 20px;
+  }
+
+  .cat-head {
+    font-size: 25px !important;
   }
 
   .box {

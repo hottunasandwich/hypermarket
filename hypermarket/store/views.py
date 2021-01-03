@@ -7,6 +7,7 @@ import json
 from ..db import get_db
 import psycopg2
 import psycopg2.extras
+import json
 # from cryptography.fernet import Fernet
 
 store_bp = Blueprint('store', __name__, template_folder='templates', static_folder='static')
@@ -88,16 +89,30 @@ def category_selector(category_name):
         with db.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
             cursor.execute(f"select category_id from category where category_name like'%{category_name}%';")
             category_num = cursor.fetchone()['category_id']
-            # print(category_num)
             
-            cursor.execute(f"""select DISTINCT ON (product_name) product_name, product_ware.product_id, price, category_name, image_link from product
-                                join category on product.category_id=category.category_id
-                                join product_ware on product.id=product_ware.product_id
-                                where parent_group={category_num}
-                                order by  product_name, product_date desc, price asc;""")
-            each_product = [dict(row) for row in cursor.fetchall()]        
-      
-    return render_template('store/category.html', each_product=each_product , category_name=category_name)
+            cursor.execute(f"""select parent_group from category where category_id={category_num}""")
+            parent = cursor.fetchone()['parent_group']
+
+            if not parent:
+            
+                cursor.execute(f"""select DISTINCT ON (product_name) product_name, product_ware.product_id, price, category_name, image_link from product
+                                    join category on product.category_id=category.category_id
+                                    join product_ware on product.id=product_ware.product_id
+                                    where parent_group={category_num}
+                                    order by  product_name, product_date desc, price asc;""")
+            else:
+                cursor.execute(f"""select DISTINCT ON (product_name) product_name, product_ware.product_id, price, category_name, image_link, category.category_id from product
+                                    join category on product.category_id=category.category_id
+                                    join product_ware on product.id=product_ware.product_id
+									where category.category_id={category_num}
+                                    order by  product_name, product_date desc, price asc;""")
+
+            each_product = [dict(row) for row in cursor.fetchall()]
+
+            with open('hypermarket/store/categories.json') as f:
+                data = json.load(f)
+
+    return render_template('store/category.html', each_product=each_product , category_name=category_name, data=data)
 
 
 @store_bp.route('/product/<int:product_id>')
@@ -116,7 +131,7 @@ def product_selector(product_id):
                                 join product_ware on product.id=product_ware.product_id
                                 where product.id={product_id} and number>0
                                 group by product_id;""")
-            total =  cursor.fetchone()                   
+            total =  cursor.fetchone()
     return render_template('store/product.html' , product=product, total=total )
 
 
