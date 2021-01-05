@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
 {% block title %}مديريت كالا‌ها{% endblock %}
+{% block extra_script %}
+<script src="static/js/productM.js"></script>
+{% endblock %}
 
 {% block content %}
 
@@ -34,34 +37,134 @@
     </div>
 </div>
 
-<div class="modal fade" id="append" tabindex="-2" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header p-1">
-          <h5 class="modal-title my-4">افزودن/ ويرايش كالا:</h5>
-            <button type="button" class="btn btn-outline-secondary m-0 p-1 border-0" data-dismiss="modal">
-              <i class="fa fa-times-circle" aria-hidden="true"></i> </button>
-        </div>
-        <div class="modal-body pt-0">
-          <form>
-            <div class="form-group p-3 pt-0">
-              <label for="nameP">نام كالا:</label>
-              <input type="text" class="form-control border-info mb-3" id="nameP">
-              <label for="categoryChoose">دسته‌بندي:</label>
-              <select class="custom-select border-info" id="categoryChoose">
-                <option selected>انتخاب كنيد...</option>
-                <option value="1">مواد غذايي</option>
-                <option value="2">نوشيدني</option>
-                <option value="3">پروتئيني‌ها</option>
-              </select>
-            </div>
-              <div class="text-left ml-3">
-                  <button type="submit" class="btn btn-secondary">ذخيره</button>
-              </div>
-          </form>
-        </div>
+<!--<div class="modal fade" id="append" tabindex="-2" role="dialog">-->
+<!--    <div class="modal-dialog" role="document">-->
+<!--      <div class="modal-content">-->
+<!--        <div class="modal-header p-1">-->
+<!--          <h5 class="modal-title my-4">افزودن/ ويرايش كالا:</h5>-->
+<!--            <button type="button" class="btn btn-outline-secondary m-0 p-1 border-0" data-dismiss="modal">-->
+<!--              <i class="fa fa-times-circle" aria-hidden="true"></i> </button>-->
+<!--        </div>-->
+<!--        <div class="modal-body pt-0">-->
+<!--          <form>-->
+<!--            <div class="form-group p-3 pt-0">-->
+<!--              <label for="nameP">نام كالا:</label>-->
+<!--              <input type="text" class="form-control border-info mb-3" id="nameP">-->
+<!--              <label for="categoryChoose">دسته‌بندي:</label>-->
+<!--              <select class="custom-select border-info" id="categoryChoose">-->
+<!--                <option selected>انتخاب كنيد...</option>-->
+<!--                <option value="1">مواد غذايي</option>-->
+<!--                <option value="2">نوشيدني</option>-->
+<!--                <option value="3">پروتئيني‌ها</option>-->
+<!--              </select>-->
+<!--            </div>-->
+<!--              <div class="text-left ml-3">-->
+<!--                  <button type="submit" class="btn btn-secondary">ذخيره</button>-->
+<!--              </div>-->
+<!--          </form>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<div class="modal fade bd-example-modal-sm" id="deleteP" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body p-0">
+        <button type="button" class="btn btn-outline-info m-1 p-1 border-0" data-dismiss="modal">
+          <i class="fa fa-times-circle" aria-hidden="true"></i>
+        </button>
+        <p class="text-right mr-2 mb-0">با حذف اين كالا تمامي موجودي هاي اين كالا در تمامي انبار‌ها نير حذف مي‌شوند؛</p>
+        <p class="mr-2 mt-0 text-danger">
+          <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+          آيا از حذف اين كالا اطمينان داريد؟
+        </p>
+      </div>
+      <div class="modal-footer border-info p-1">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
+        <button type="button" class="btn btn-danger" id="final-del" data-dismiss="modal">حذف</button>
       </div>
     </div>
+  </div>
+</div>
+
+<div class="modal fade" id="append" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header p-1">
+        <h5 class="modal-title mt-3 mb-2">افزودن كالا</h5>
+          <button type="button" class="btn btn-outline-info m-0 p-1 border-0" data-dismiss="modal">
+            <i class="fa fa-times-circle" aria-hidden="true"></i>
+          </button>
+      </div>
+      <div class="modal-body">
+        <form class="needs-validation" novalidate>
+          <div class="form-group">
+            <label for="new-name">نام كالا:</label>
+            <input type="text" class="form-control mb-2" id="pro-add" required>
+            <div class="invalid-feedback">
+              وارد كردن نام كالا الزاميست !
+            </div>
+            <label for="category-select">انتخاب دسته‌بندي:</label>
+            <select class="form-control" id="cat-add" required>
+              <option disabled selected value="">انتخاب كنيد</option>
+            </select>
+            <div class="invalid-feedback">
+              دسته‌بندي مربوطه را انتخاب كنيد!
+            </div>
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" id="customFile">
+              <label class="custom-file-label text-secondary mt-4 text-center" for="customFile">تصوير كالا را انتخاب كنيد...</label>
+            </div>
+          </div>
+          <div class="text-center">
+            <button class="btn btn-info mt-4" type="submit" id="final-pro-add">ذخيره تغييرات</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modifyP" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header p-1">
+        <h5 class="modal-title mt-3 mb-2">ويرايش كالا</h5>
+          <button type="button" class="btn btn-outline-info m-0 p-1 border-0" data-dismiss="modal">
+            <i class="fa fa-times-circle" aria-hidden="true"></i>
+          </button>
+      </div>
+      <div class="modal-body">
+        <form class="needs-validation" novalidate>
+          <div class="form-group">
+            <label for="new-name">نام كالا:</label>
+            <input type="text" class="form-control mb-2" id="new-name" required>
+            <div class="invalid-feedback">
+              وارد كردن نام كالا الزاميست !
+            </div>
+            <label for="category-select">انتخاب دسته‌بندي:</label>
+            <select class="form-control" id="category-select" required>
+              <option disabled selected value="">انتخاب كنيد</option>
+            </select>
+            <div class="invalid-feedback">
+              دسته‌بندي مربوطه را انتخاب كنيد!
+            </div>
+          </div>
+          <div class="text-center">
+            <button class="btn btn-info" type="submit" id="final-pro-mod">ذخيره تغييرات</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="w-25 mx-auto" id="alert" style="display: none;">
+        <div class="alert alert-success text-center show" role="alert">
+          <i class="fa fa-check-circle" aria-hidden="true"></i>
+          عمليات با موفقيت انجام شد.
+        </div>
 </div>
 
 <style>
@@ -77,32 +180,11 @@
     }
 </style>
 
-<div class="col-10 mx-auto mb-5">
-    <table class="table table-striped align-self-center">
-        <tr>
-            <th>تصوير</th>
-            <th>نام‌كالا</th>
-            <th>دسته‌بندي</th>
-            <th></th>
-        </tr>
-        {% for product in products %}
-        <tr>
-            <td>
-                <img class="img-thumbnail" src="{{ product[0] }}" width="100">
-            </td>
-            <td>{{ product[1] }}</td>
-            <td>{{ product[2] }}</td>
-            <td>
-                <a class="text-decoration-none font-weight-bold" href="#">
-                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>     ويرايش
-                </a> &nbsp; &nbsp;
-                <a class="btn btn-outline-danger border-0" href="#" role="button">
-                    <i class="fa fa-trash" aria-hidden="true"></i>
-                </a>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+<div class="col-10 mx-auto mb-5 mytable">
+    <div class="col-auto mx-auto text-center text-info" style="margin-top: 100px;">
+        <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+        <p class="font-weight-bold mt-3">در حال بارگزاري...</p>
+    </div>
 </div>
 
 {% endblock %}

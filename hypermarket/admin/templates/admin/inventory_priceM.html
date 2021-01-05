@@ -1,13 +1,151 @@
 {% extends 'base.html' %}
 {% block title %}مديريت موجودي ‌و قيمت‌ها{% endblock %}
 
+
 {% block content %}
 
 <div class="col-11 m-4 d-flex justify-content-end">
     <h3 class="ms-auto mr-4 ml-auto p-2">مديريت موجودي و قيمت‌ها:</h3>
-    <button class="btn btn-sm btn-outline-secondary m-3">
+    <button class="btn btn-sm btn-outline-secondary m-3" id="add-inventory" data-toggle="modal" data-target="#add-inv">
         افزودن موجودي
     </button>
 </div>
 
+<div class="w-25 mx-auto" id="alert" style="display: none;">
+        <div class="alert alert-success text-center show" role="alert">
+          <i class="fa fa-check-circle" aria-hidden="true"></i>
+          عمليات با موفقيت انجام شد.
+        </div>
+</div>
+
+<div class="modal fade bd-example-modal-sm" id="deleteIP" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body p-0">
+        <button type="button" class="btn btn-outline-info m-1 p-1 border-0" data-dismiss="modal">
+          <i class="fa fa-times-circle" aria-hidden="true"></i>
+        </button>
+        <p class="text-right mr-2 mb-0">با حذف اين سطر،همه موجودي اين كالا در انبار مربوطه نيز حذف مي‌شود.</p>
+        <p class="mr-2 mt-0 text-danger">
+          <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+          آيا از حذف اين كالا اطمينان داريد؟
+        </p>
+      </div>
+      <div class="modal-footer border-info p-1">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
+        <button type="button" class="btn btn-danger" id="final-del" data-dismiss="modal">حذف</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modifyIP" tabindex="-2" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header p-1">
+        <h5 class="modal-title mt-4 mr-2">ويرايش موجودي و قيمت</h5>
+          <button type="button" class="btn btn-outline-info m-0 p-1 border-0" data-dismiss="modal">
+            <i class="fa fa-times-circle" aria-hidden="true"></i>
+          </button>
+      </div>
+      <div class="modal-body px-5 pt-3">
+        <form class="needs-validation" novalidate>
+          <label for="new-price" class="mt-2"><b>قيمت:</b></label>
+          <input type="number" class="form-control mr-3" id="new-price" placeholder=" قيمت جديد..." required>
+          <div class="invalid-feedback">
+            قيمت جديد كالا را وارد كنيد !
+          </div>
+          <label for="new-inventory" class="mt-2"><b>موجودي در انبار:</b></label>
+          <input type="number" class="form-control mr-3" id="new-inventory" placeholder=" تعداد موجودي جديد...">
+          <div class="col-12 mt-2 text-center">
+            <button type="submit" class="btn btn-info pb-2 px-5" id="final-modify">ذخيره تغييرات</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="add-inv" tabindex="-3" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header p-1">
+        <h5 class="modal-title mt-4 mr-2">افزودن موجودي</h5>
+          <button type="button" class="btn btn-outline-info m-0 p-1 border-0" data-dismiss="modal">
+            <i class="fa fa-times-circle" aria-hidden="true"></i>
+          </button>
+      </div>
+      <div class="modal-body p-3">
+        <form class="needs-validation" novalidate>
+          <div class="form-group">
+            <label for="pro-select">انتخاب كالا:</label>
+            <select multiple class="form-control" id="pro-select" required>
+            </select>
+            <div class="invalid-feedback">
+              كالاي مورد نظر را انتخاب كنيد.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="ware-select">انتخاب انبار</label>
+            <select class="form-control" id="ware-select" required>
+              <option disabled selected value="">انتخاب كنيد</option>
+            </select>
+            <div class="invalid-feedback">
+              انبار مربوطه را انتخاب كنيد
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col-md-6 mb-3">
+              <input type="number" class="form-control" id="inv-price" placeholder="قيمت ..." required>
+              <div class="invalid-feedback">
+                وارد كردن قيمت الزاميست !
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <input type="number" class="form-control" id="inv-number" placeholder="تعداد موجودي ..." required>
+              <div class="invalid-feedback">
+                تعداد موجودي را وارد كنيد!
+              </div>
+            </div>
+          </div>
+          <div class="text-center">
+            <button class="btn btn-info" type="submit" id="final-inv-add">افزودن موجودي جديد</button>
+          </div>
+        </form>
+      </div>
+      </div>
+    </div>
+</div>
+
+
+<style>
+  #new-price::-webkit-inner-spin-button,
+  #new-price::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  #inv-price::-webkit-inner-spin-button,
+  #inv-price::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  td, th {
+    text-align: center;
+    border: 1px solid #dddddd;
+    padding: 8px;
+  }
+</style>
+
+<div class="col-10 mx-auto mb-5 mytable">
+  <div class="col-auto mx-auto text-center text-info" style="margin-top: 100px;">
+        <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+        <p class="font-weight-bold mt-3">در حال بارگزاري...</p>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script src="static/js/inventory_priceM.js"></script>
 {% endblock %}

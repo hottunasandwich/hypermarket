@@ -22,20 +22,35 @@ makeTable(url1)
 function deleteAction() {
     var $delButton = $(this)
     var funcUrl= url2 + $delButton.attr("id")
-    $("#final-del").click(function(){
+    $("#final-del").click(function(e){
+        e.preventDefault()
         $.get(funcUrl.replace('D',''), () => $delButton.closest('tr').remove())
+        alert()
     })
 }
 
 $("#final-add").click(sendNew)
-function sendNew(){
-    $.post(url3, {'nameWH': $("#nameWH").val()})
+function sendNew(e){
+    e.preventDefault()
+    $("#final-add").attr("data-dismiss", "modal")
+    $.post(url3, {'nameWH': $("#nameWH").val()},alert)
+    makeTable(url1)
 }
 
 function sendModified(){
     var $modButton = $(this)
     var $modifyId = $modButton.attr("id")
-    $("#final-modify").click(function(){
+    $("#final-modify").click(function(e){
+        e.preventDefault()
+        $("#final-modify").attr("data-dismiss", "modal")
         $.post(url4, {'nameModify': $("#nameModify", '').val(), 'rowId': $modifyId.replace('M','')})
+        alert()
     });
+}
+
+async function alert(){
+    $("#alert").slideDown(1500)
+    $("#alert").click(() => $("#alert").hide())
+    await new Promise(r => setTimeout(r, 6000))
+    $("#alert").slideUp(1500)
 }

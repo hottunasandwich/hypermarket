@@ -20,11 +20,11 @@ function orderDetail(){
     var $curButton = $(this)
     $.get(url2 + $curButton.attr("id"), function(resp) {
         $('#order-detail').empty()
-        var $detail = "<p class='mb-0'><b>نام مشتري:</b> &nbsp; &nbsp;" + resp[0].username + "</p>"
-        $detail += "<p class='mb-0'><b>آدرس:</b> &nbsp; &nbsp;" + resp[0].address + "</p>"
-        $detail += "<p class='mb-0'><b>تلفن:</b> &nbsp; &nbsp;" + resp[0].phone_number + "</p>"
-        $detail += "<p class='mb-0'><b>زمان تحويل:</b> &nbsp; &nbsp;" + resp[0].delivery_time + "</p>"
-        $detail += "<p class='mb-0'><b>زمان سفارش:</b> &nbsp; &nbsp;" + resp[0].order_time + "</p>"
+        var $detail = "<table><tr><td><b>نام مشتري:</b></td><td></td> &nbsp; &nbsp;<td>" + resp[0].username + "</td></tr>"
+        $detail += "<tr><td><b>آدرس:</b></td><td></td> &nbsp; &nbsp;<td>" + resp[0].address + "</td></tr>"
+        $detail += "<tr><td><b>تلفن:</b></td><td></td> &nbsp; &nbsp;<td>" + resp[0].phone_number + "</td></tr>"
+        $detail += "<tr><td><b>زمان تحويل:</b></td><td></td> &nbsp; &nbsp;<td>" + resp[0].delivery_time + "</td></tr>"
+        $detail += "<tr><td><b>زمان سفارش:</b></td><td></td> &nbsp; &nbsp;<td>" + resp[0].order_time + "</td></tr></table>"
         $('#order-detail').html($detail)
     })
 }
