@@ -1,0 +1,14 @@
+{% macro category(data) -%}
+<ul>
+    {% for i in data %}
+    {%- if i.subcategories -%}
+    <li><a class="text-dark cat-head text-decoration-none" href="{{url_for('store.category_selector', category_name=i.name)}}">{{ i.name }}</a></li>
+    {{- category(i.subcategories) -}}
+    {% else %}
+    <li><a class="text-muted cat-sub text-decoration-none py-0" href="{{url_for('store.category_selector', category_name=i.name)}}">{{ i.name }}</a></li>
+    {%- endif %}
+    {% endfor %}
+</ul>
+<br>
+{%- endmacro %}
+{{category(data)}}

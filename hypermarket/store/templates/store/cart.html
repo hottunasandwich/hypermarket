@@ -1,0 +1,62 @@
+{% extends 'store/base.html' %}
+{% block content %}
+<div class="row mb-5">
+  <div class="col-11 m-auto mt-4 d-flex justify-content-end">
+    <h3 class="ms-auto p-2 bd-highlight">سبد خرید</h3>
+  </div>
+</div>
+
+<style>
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  td,
+  th {
+    text-align: center;
+    border: 1px solid #dddddd;
+    padding: 8px;
+  }
+
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
+</style>
+
+<div class="col-10 m-auto">
+  <table>
+    <tr>
+      <th>کالا</th>
+      <th>قیمت</th>
+      <th>تعداد</th>
+      <th colspan="2"></th>
+    </tr>
+    {% for inventory in inventories %}
+    <tr>
+      <td>{{ inventory }}</td>
+      <td>10,000</td>
+      <td>20</td>
+      <td><a href="#">ويرايش</a></td>
+      <td><a href="#">حذف</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+
+<div class="row mb-5">
+  <div class="col-10 m-auto mt-4 d-flex justify-content-end">
+    <h3 class="ms-auto p-2 bd-highlight">جمع کل:</h3>
+    <p></p>
+    <a
+      class="btn btn-outline-dark m-3"
+      style="background-color: forestgreen; color: white"
+      href="{{url_for('store.cart_approve_function')}}"
+      role="button"
+      >نهایی کردن سبد خرید</a
+    >
+  </div>
+</div>
+{% endblock %}
+<!-- navbar expand/light?? -->
+<!-- justify content start?? -->

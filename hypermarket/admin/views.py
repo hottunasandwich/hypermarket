@@ -28,7 +28,6 @@ def check_authentication(username, password):
     return str(f.decrypt(bytes(password_, encoding='UTF-8')), encoding='UTF-8') == password or {
         username: password} in current_app.config.get('ADMIN')
 
-
 @admin_bp.route('/login', methods=['POST', 'GET'])
 def login():
     if 'user' in session:
