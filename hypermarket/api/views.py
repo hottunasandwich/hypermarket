@@ -1,4 +1,5 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, json
+from werkzeug.utils import secure_filename
 from persiantools.jdatetime import JalaliDate
 from ..db import get_db
 import psycopg2.extras
@@ -10,24 +11,52 @@ api_bp = Blueprint('api', __name__)
 def product_list():
     db = get_db()
     with db.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-        cur.execute("select id, product_name, category_id, image_link from product")
+        cur.execute("select id, product_name, category, image_link from product order by id")
         data = cur.fetchall()
     return jsonify(data)
 
 
 @api_bp.route('/product/<int:product_id>')
 def product_details(product_id):
-    return ""
+    pass
+
+
+@api_bp.route('/product/get_category')
+def get_category():
+    with open("hypermarket/store/categories.json", encoding='utf-8') as file:
+        data = json.load(file)
+        x = []
+        for i in data:
+            y = str(i['name'])
+            for j in i['subcategories']:
+                x.append(y + ' / ' + j['name'])
+    return jsonify(x)
 
 
 @api_bp.route('/product/add', methods=['POST'])
 def product_add():
-    pass
+    if request.method == 'POST':
+        f = request.files["fileUpload"]
+        f.save("hypermarket/admin/static/uploads/files//" + secure_filename(f.filename))
+        # image, name, category = request.files["img"], request.form["name"], request.form["category"]
+        # image.save("hypermarket/admin/static/uploads/images/" + secure_filename(image.filename))
+        # print(name, category)
+        print("test")
+        return "OK"
 
 
 @api_bp.route('/product/edit', methods=['POST'])
 def product_edit():
-    pass
+    if request.method == 'POST':
+        product_id, name, category = request.form["id"], request.form["name"], request.form["category"]
+        db = get_db()
+        with db.cursor() as cur:
+            cur.execute("update product set product_name = %s, category = %s where id=%s;",
+                        (name, category, product_id,))
+            db.commit()
+    else:
+        return 'NOT OK'
+    return 'OK'
 
 
 @api_bp.route('/product/delete/<int:product_id>')

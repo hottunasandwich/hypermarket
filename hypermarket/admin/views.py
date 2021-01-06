@@ -28,6 +28,7 @@ def check_authentication(username, password):
     return str(f.decrypt(bytes(password_, encoding='UTF-8')), encoding='UTF-8') == password or {
         username: password} in current_app.config.get('ADMIN')
 
+
 @admin_bp.route('/login', methods=['POST', 'GET'])
 def login():
     if 'user' in session:
@@ -60,21 +61,13 @@ def dashboard():
 @admin_bp.route('/product_manage')
 @login_required
 def product_manage():
-    products = [[
-        'https://dkstatics-public.digikala.com/digikala-products/115604447.jpg?x-oss-process=image/resize,h_1600/quality,q_80',
-        'چاي گلستان 400 گرمي', 'مواد غذايي'],
-        [
-            'https://dkstatics-public.digikala.com/digikala-products/115604447.jpg?x-oss-process=image/resize,h_1600/quality,q_80',
-            'چاي گلستان 400 گرمي', 'مواد غذايي'],
-        ['', 'چاي گلستان 400 گرمي', 'مواد غذايي']]
-    return render_template('admin/productM.html', products=products)
+    return render_template('admin/productM.html')
 
 
 @admin_bp.route('/warehouse_manage')
 @login_required
 def warehouse_manage():
-    inventories = ['انبار شماره1', 'انبار شماره2', 'انبار شماره3', 'انبار شماره4']
-    return render_template('admin/warehouseM.html', inventories=inventories)
+    return render_template('admin/warehouseM.html')
 
 
 @admin_bp.route('/orders_manage')

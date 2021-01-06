@@ -83,8 +83,8 @@ $.get(url4, function(resp){
     })
 })
 
-$("#final-inv-add").click(esi)
-function esi(e){
+$("#final-inv-add").click(addInventory)
+function addInventory(e){
     if ($("#pro-select").val() && $("#ware-select").val() && $("#inv-price").val() && $("#inv-number").val()){
         e.preventDefault()
         var $pro_add = $("#pro-select").val()[0]
