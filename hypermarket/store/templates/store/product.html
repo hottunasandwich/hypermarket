@@ -1,26 +1,38 @@
 {% extends 'store/base.html' %}
 {% block content %}
-<div class="box">
-  <div class="title">
-      <h3>{{product['product_name']}}</h3>
-      <br> <br> <br>
-      <!-- category -->
-      <br>
-      <h1>{{product['price']}} تومان</h1>
-      <br> <br>
-      
-      <input class="number" min="1" max="{{total['sum']}}" required="required" type="number" 
-      id="num" name="number[0]">
-      <a class="btn btn-success create-action" href="#" >
+<div class="container">
+  <div class="row mt-4">
+    <div>
+      {% for category in category_path %}
+    <span class="text-muted"><a class="h4 m-1 text-decoration-none" href="{{ url_for('store.category_selector', category_name=category) }}">{{ category
+        }}</a>{% if not loop.last %}>{% endif %}</span>
+    {% endfor %}
+    </div>
+  </div>
+  <div class="row">
+    <div class="box">
+      <div class="title">
+        <h3>{{product['product_name']}}</h3>
+        <br> <br> <br>
+        <!-- category -->
+        <br>
+        <h1>{{product['price']}} تومان</h1>
+        <br> <br>
+
+        <input class="number" min="1" max="{{total['sum']}}" required="required" type="number" id="num"
+          name="number[0]">
+        <a class="btn btn-success create-action" href="#">
           <i class="fa fa-plus fa-lg"></i> افزودن به سبد خرید
-      </a>
+        </a>
+
+      </div>
+      <img src="{{product['image_link']}}" />
+    </div>
+
+    <h4 class="text-right">{{product['description']}}</h3>
 
   </div>
-    <img src="{{product['image_link']}}" />
-  </div>
-  
-  <h3>{{product['description']}}</h3>
-  
+</div>
 <style>
   h1,
   h3 {

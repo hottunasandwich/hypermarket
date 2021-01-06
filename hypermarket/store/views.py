@@ -120,7 +120,7 @@ def product_selector(product_id):
     db = get_db()
     with db:
         with db.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
-            cursor.execute(f"""select product_name, image_link, price, description, category_name from product 
+            cursor.execute(f"""select product_name, image_link, price, description, category_name, category.category_id from product 
                                 join product_ware on product.id=product_ware.product_id
                                 join category on product.category_id=category.category_id
                                 where product.id={product_id} and number>0
@@ -132,7 +132,21 @@ def product_selector(product_id):
                                 where product.id={product_id} and number>0
                                 group by product_id;""")
             total =  cursor.fetchone()
-    return render_template('store/product.html' , product=product, total=total )
+            
+            cat_id = product['category_id']
+            category_path = []
+            
+            while True:
+                cursor.execute(f"""select parent_group, category_name from category where category_id = {cat_id}""")
+                _all = cursor.fetchone()
+                cat_id, cat_name = _all['parent_group'], _all['category_name']
+                category_path = [cat_name] + category_path
+                if not cat_id:
+                    break
+
+            print(category_path)
+
+    return render_template('store/product.html' , product=product, total=total, category_path=category_path)
 
 
 
