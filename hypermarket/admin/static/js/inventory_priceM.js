@@ -1,5 +1,5 @@
 url1 = 'http://127.0.0.1:5000/api/inventory_price/list'
-url2 = 'http://127.0.0.1:5000/api/inventory_price/delete/'
+url2 = 'http://127.0.0.1:5000/api/inventory_price/delete'
 url3 = 'http://127.0.0.1:5000/api/inventory_price/edit'
 url4 = 'http://127.0.0.1:5000/api/inventory_price/detail'
 url5 = 'http://127.0.0.1:5000/api/inventory_price/add'
@@ -13,7 +13,7 @@ function makeTable(url){
         $table += "<tr><td>"+ i.warehouse_name +"</td><td>"+ i.product_name +"</td><td>"+ i.price +"</td>"
         $table += "<td>"+ i.number +"</td>"
         $table += '<td><button class="btn btn-link text-decoration-none modify-me" id="'+i.product_id+"-"+ i.ware_id+'" data-toggle="modal" data-target="#modifyIP"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> ويرايش</button> &nbsp;'
-        $table += '<button class="btn btn-outline-danger border-0 delete-me" id="'+i.product_id+'D" data-toggle="modal" data-target="#deleteIP"><i class="fa fa-trash" aria-hidden="true"></i></button></td></tr>'
+        $table += '<button class="btn btn-outline-danger border-0 delete-me" id="'+i.product_id+"."+ i.ware_id+'" data-toggle="modal" data-target="#deleteIP"><i class="fa fa-trash" aria-hidden="true"></i></button></td></tr>'
     })
     $table += "</table>"
     var $rowOption = $('.mytable').append($table)
@@ -25,11 +25,12 @@ makeTable(url1)
 
 function deleteAction() {
     var $delButton = $(this)
-    var funcUrl= url2 + $delButton.attr("id")
-    console.log(funcUrl)
+    var allId= $delButton.attr("id")
     $("#final-del").click(function(){
-        $.get(funcUrl.replace('D',''), () => $delButton.closest('tr').remove())
-        alert()
+        $.post(url2, {"allId": allId}).done(function(res){
+            $delButton.closest('tr').remove()
+            alertSuccess()
+        })
     })
 }
 
@@ -40,37 +41,17 @@ function sendModified(){
     $("#final-modify").click(function(e){
         if ($("#new-price").val() && $("#new-inventory").val()){
             e.preventDefault()
-            $("#final-modify").attr("data-dismiss", "modal")
-            $.post(url3, {'product_id': $allId[0], 'ware_id': $allId[1],'new_price': $("#new-price").val(), 'new-inventory': $("#new-inventory").val()})
-            alert()
+            $.post(url3, {'product_id': $allId[0], 'ware_id': $allId[1],
+            'new_price': $("#new-price").val(), 'new-inventory': $("#new-inventory").val()}, alertSuccess)
             makeTable(url1)
+            $("#mod-form")[0].reset()
+            $("#final-modify").attr("data-dismiss", "modal")
         }
         else {
             e.preventDefault()
         }
     })
 }
-async function alert(){
-    $("#alert").slideDown(1500)
-    $("#alert").click(() => $("#alert").hide())
-    await new Promise(r => setTimeout(r, 6000))
-    $("#alert").slideUp(1500)
-}
-
-(function() {
-  window.addEventListener('load', function() {
-    var forms = document.getElementsByClassName('needs-validation');
-    var validation = Array.prototype.filter.call(forms, function(form) {
-      form.addEventListener('submit', function(event) {
-        if (form.checkValidity() === false) {
-          event.preventDefault()
-          event.stopPropagation()
-        }
-        form.classList.add('was-validated')
-      }, false);
-    });
-  }, false)
-})();
 
 $.get(url4, function(resp){
     resp[0].forEach(function(i){
@@ -92,9 +73,10 @@ function addInventory(e){
         var $price_add = $("#inv-price").val()
         var $num_add = $("#inv-number").val()
         $.post(url5, {'pro_id': $pro_add.split("/")[0], 'ware_id': $ware_add.split("/")[0],
-        'price': $price_add, 'number': $num_add}, alert)
+        'price': $price_add, 'number': $num_add}, alertSuccess)
+        makeTable(url1)
         $("#final-inv-add").attr("data-dismiss", "modal")
-        makeTable(url)
+        $("#add-form")[0].reset()
     }
     else
         null

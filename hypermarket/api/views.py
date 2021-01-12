@@ -19,11 +19,6 @@ def product_list():
     return jsonify(data)
 
 
-@api_bp.route('/product/<int:product_id>')
-def product_details(product_id):
-    pass
-
-
 @api_bp.route('/product/get_category')
 def get_category():
     db = get_db()
@@ -33,6 +28,7 @@ def get_category():
             curs.execute("select * from category where parent_group=%s", (parent_id,))
             return curs.fetchall()
 
+    # ===================> for category with json format <===================
     # with open("hypermarket/store/categories.json", encoding='utf-8') as file:
     #     data = json.load(file)
     #     global category_list
@@ -51,11 +47,10 @@ def get_category():
                 for j in sub_group2:
                     x[0] = f"{i[1]} / {j[1]}"
                     x[1] = j[0]
-                    print(x)
                     sub_group3 = find_sub_groups(j[0])
                     if sub_group3:
                         for k in sub_group3:
-                            x[0] = f"{i[1]} / {j[1]} /{ k[1]}"
+                            x[0] = f"{i[1]} / {j[1]} /{k[1]}"
                             x[1] = k[0]
                             y[x[1]] = x[0]
                     else:
@@ -83,7 +78,7 @@ def product_add_one():
         except FileNotFoundError:
             with db.cursor() as cur:
                 cur.execute("insert into product(product_name,category_id,category) values(%s,%s,%s);",
-                            (request.form["pro-add"],category_id, category,))
+                            (request.form["pro-add"], category_id, category,))
                 db.commit()
     return "OK"
 
@@ -136,16 +131,11 @@ def product_edit():
 def product_delete(product_id):
     db = get_db()
     with db.cursor() as cur:
-        cur.execute("delete from product_ware where product_id= %s;", (product_id,))
-        # db.commit()
+        cur.execute("delete from product_ware where product_id= %s ;", (product_id,))
+        db.commit()
         cur.execute("delete from product where id= %s", (product_id,))
-        # db.commit()
+        db.commit()
     return "OK"
-
-
-@api_bp.route('/product/upload')
-def product_upload():
-    pass
 
 
 @api_bp.route('/warehouse/list')
@@ -251,12 +241,17 @@ def inventory_price_edit():
     return "NOT OK"
 
 
-@api_bp.route('/inventory_price/delete/<int:product_id>')
-def inventory_price_delete(product_id):
+@api_bp.route('/inventory_price/delete', methods=['POST'])
+def inventory_price_delete():
+    pro_id, ware_id = request.form['allId'].split(".")
+    print(pro_id)
     db = get_db()
     with db.cursor() as cur:
-        cur.execute("delete from product_ware where product_id= %s;", (product_id,))
-        db.commit()
+        try:
+            cur.execute("delete from product_ware where product_id= %s and ware_id =%s;", (pro_id, ware_id,))
+            # db.commit()
+        except:
+            abort(500, description="product was ordered , Unable to delete ordered products!")
     return "OK"
 
 

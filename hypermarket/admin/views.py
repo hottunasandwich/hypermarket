@@ -48,7 +48,7 @@ def login():
                     return redirect(url_for('admin.dashboard'))
 
                 else:
-                    flash('نام کاریری یا رمز غبور اشتباه میباشد')
+                    flash('نام کاریری یا رمز عبور اشتباه میباشد')
                     return render_template('admin/login.html', form=login_form)
 
 
@@ -98,4 +98,4 @@ def upload():
 @login_required
 def logout():
     session.pop('user', None)
-    return redirect(url_for('admin.login'))
+    return redirect(url_for('store.home'))
