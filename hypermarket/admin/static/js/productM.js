@@ -27,10 +27,9 @@ function makeTable(url){
 function deleteAction() {
     var $delButton = $(this)
     var funcUrl= url2 + $delButton.attr("id")
-    console.log(funcUrl)
     $("#final-del").click(function(){
         $.get(funcUrl.replace('D',''), () => $delButton.closest('tr').remove())
-        alert()
+        alertSuccess()
     })
 }
 
@@ -41,18 +40,11 @@ function sendModified(){
         if ($("#new-name").val() && $("#category-select").val()){
             e.preventDefault()
             $.post(url4, {'name': $("#new-name").val(), 'category': $("#category-select").val(),
-                                                    'id': $modifyId.replace('M',''),},alert)
+                                                    'id': $modifyId.replace('M',''),},alertSuccess)
             $("#final-pro-mod").attr("data-dismiss", "modal")
         }
     })
     makeTable(url1)
-}
-
-async function alert(){
-    $("#alert").slideDown(1500)
-    $("#alert").click(() => $("#alert").hide())
-    await new Promise(r => setTimeout(r, 6000))
-    $("#alert").slideUp(1500)
 }
 
 $.get(url3, function(resp){
@@ -69,7 +61,6 @@ $.get(url3, function(resp){
 $(function() {
     $("#final-pro-add").click(function(e) {
         var formData = new FormData($('#add-form')[0])
-        console.log($("#add-form"))
         if ($("#pro-add").val() && $("#cat-add").val()) {
             e.preventDefault()
             $("#final-pro-add").attr("data-dismiss", "modal")
@@ -81,12 +72,14 @@ $(function() {
             cache: false,
             processData: false,
             success: function(data) {
-                console.log("alert")
                 makeTable(url1)
             }
-        })}
+        }).fail(function() {
+                alertError()
+            })
+        }
         $("#add-form")[0].reset()
-        $("#img-add").val('').clone(true)
+        $(".custom-file-label").html("")
     })
 })
 
@@ -106,12 +99,13 @@ $(function() {
             processData: false,
             success: function(data) {
                 $("#upload-file-btn").attr("data-dismiss", "modal")
-                console.log("alert")
+                alertSuccess()
                 makeTable(url1)
             }
         }).fail(function() {
                 if ($("#fileUpload").val())
-                    console.log("alert")
+                    alertError()
             })
+        $(".custom-file-label").html("")
     })
 })

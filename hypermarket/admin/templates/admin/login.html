@@ -21,3 +21,15 @@
     </div>
 </div>
 {% endblock %}
+
+{% block flash %}
+    {% with messages = get_flashed_messages() %}
+    {% for message in messages %}
+    <div class="w-50 mt-3 mx-auto alert-box">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ message }}
+        </div>
+    </div>
+    {% endfor %}
+    {% endwith %}
+{% endblock %}

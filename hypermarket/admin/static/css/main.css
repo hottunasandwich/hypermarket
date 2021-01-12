@@ -7,8 +7,27 @@
     font-family: persianfont;
 }
 
-#alert {
+img {
+    position: relative;
+}
+
+.mytable td, th {
+  text-align: center;
+  border: 1px solid #dddddd;
+  padding: 8px;
+}
+
+#alert-success {
+  display: none;
+  z-index: 99 !important;
   position: fixed;
-  right: 5;
+  right: 1;
+  bottom: 0;
+}
+#alert-error {
+  display: none;
+  z-index: 100 !important;
+  position: fixed;
+  right: 1;
   bottom: 0;
 }

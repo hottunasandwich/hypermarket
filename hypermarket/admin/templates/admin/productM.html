@@ -151,47 +151,11 @@
   </div>
 </div>
 
-<script>
-  (function() {
-  window.addEventListener('load', function() {
-    var forms = document.getElementsByClassName('needs-validation');
-    var validation = Array.prototype.filter.call(forms, function(form) {
-      form.addEventListener('submit', function(event) {
-        if (form.checkValidity() === false) {
-          event.preventDefault()
-          event.stopPropagation()
-        }
-        form.classList.add('was-validated')
-      }, false);
-    });
-  }, false)
-})();
-</script>
-
-<div class="w-25 mx-auto" id="alert" style="display: none;">
-        <div class="alert alert-success text-center show" role="alert">
-          <i class="fa fa-check-circle" aria-hidden="true"></i>
-          عمليات با موفقيت انجام شد.
-        </div>
-</div>
-
-<style>
-    table {
-      border-collapse: collapse;
-      width: 100%;
-    }
-
-    td, th {
-      text-align: center;
-      border: 1px solid #dddddd;
-      padding: 8px;
-    }
-</style>
-
 <div class="col-10 mx-auto mb-5 mytable">
     <div class="col-auto mx-auto text-center text-info" style="margin-top: 100px;">
         <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
         <p class="font-weight-bold mt-3">در حال بارگزاري...</p>
     </div>
 </div>
+
 {% endblock %}

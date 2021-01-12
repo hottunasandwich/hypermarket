@@ -11,13 +11,6 @@
     </button>
 </div>
 
-<div class="w-25 mx-auto" id="alert" style="display: none;">
-        <div class="alert alert-success text-center show" role="alert">
-          <i class="fa fa-check-circle" aria-hidden="true"></i>
-          عمليات با موفقيت انجام شد.
-        </div>
-</div>
-
 <div class="modal fade bd-example-modal-sm" id="deleteIP" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -49,14 +42,14 @@
           </button>
       </div>
       <div class="modal-body px-5 pt-3">
-        <form class="needs-validation" novalidate>
+        <form class="needs-validation" id="mod-form" novalidate>
           <label for="new-price" class="mt-2"><b>قيمت:</b></label>
-          <input type="number" class="form-control mr-3" id="new-price" placeholder=" قيمت جديد..." required>
+          <input type="number" class="form-control mr-3" min="0" id="new-price" placeholder=" قيمت جديد..." required>
           <div class="invalid-feedback">
             قيمت جديد كالا را وارد كنيد !
           </div>
           <label for="new-inventory" class="mt-2"><b>موجودي در انبار:</b></label>
-          <input type="number" class="form-control mr-3" id="new-inventory" placeholder=" تعداد موجودي جديد...">
+          <input type="number" class="form-control mr-3" min="0" id="new-inventory" placeholder=" تعداد موجودي جديد...">
           <div class="col-12 mt-2 text-center">
             <button type="submit" class="btn btn-info pb-2 px-5" id="final-modify">ذخيره تغييرات</button>
           </div>
@@ -76,7 +69,7 @@
           </button>
       </div>
       <div class="modal-body p-3">
-        <form class="needs-validation" novalidate>
+        <form class="needs-validation" id="add-form" novalidate>
           <div class="form-group">
             <label for="pro-select">انتخاب كالا:</label>
             <select multiple class="form-control" id="pro-select" required>
@@ -96,13 +89,13 @@
           </div>
           <div class="form-row">
             <div class="col-md-6 mb-3">
-              <input type="number" class="form-control" id="inv-price" placeholder="قيمت ..." required>
+              <input type="number" class="form-control" min="0" id="inv-price" placeholder="قيمت ..." required>
               <div class="invalid-feedback">
                 وارد كردن قيمت الزاميست !
               </div>
             </div>
             <div class="col-md-6 mb-3">
-              <input type="number" class="form-control" id="inv-number" placeholder="تعداد موجودي ..." required>
+              <input type="number" class="form-control" min="0" id="inv-number" placeholder="تعداد موجودي ..." required>
               <div class="invalid-feedback">
                 تعداد موجودي را وارد كنيد!
               </div>
@@ -129,12 +122,6 @@
   #inv-price::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
-  }
-
-  td, th {
-    text-align: center;
-    border: 1px solid #dddddd;
-    padding: 8px;
   }
 </style>
 
