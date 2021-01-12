@@ -12,7 +12,7 @@
     <button class="btn btn-sm btn-outline-success m-2 py-2" data-toggle="modal" data-target="#upload">
         import<i class="fa fa-folder-open" aria-hidden="true"></i>
     </button>
-    <button class="btn btn-sm btn-outline-secondary m-2 py-2" data-toggle="modal" data-target="#append">
+    <button class="btn btn-sm btn-outline-secondary m-2 py-2" id="adding" data-toggle="modal" data-target="#append">
         افزودن كالا
     </button>
 </div>
@@ -27,17 +27,23 @@
           </button>
         </div>
         <div class="modal-body text-center">
-          <form id="upload-file" enctype="multipart/form-data">
-            <div class="custom-file">
+          <form id="upload-file" class="needs-validation" enctype="multipart/form-data" novalidate>
               <fieldset>
-              <input type="file" class="custom-file-input" accept=".xls, .xlsx"
-                     name="fileUpload" id="fileUpload">
-              <label class="custom-file-label text-color-light text-center border-info" for="fileUpload">فايل خود را انتخاب كنيد...</label>
+                  <input type="file" class="custom-file-input" accept=".xls, .xlsx"
+                         name="fileUpload" id="fileUpload" required>
+                  <label class="custom-file-label text-color-light text-center m-4" for="fileUpload">
+                    فايل خود را انتخاب كنيد...
+                  </label>
+                  <div class="invalid-feedback text-right mr-3 mt-2">
+                    انتخاب فايل الزاميست!
+                  </div>
+                  <small class="form-text text-muted text-right mt-3 mr-2">
+                    فايل فقط بايد شامل چهار ستون به ترتيب : نام محصول، لينك تصوير، توضيحات و دسته‌بندي مجاز باشد !
+                  </small>
               </fieldset>
               <fieldset>
-                <button type="button" class="btn btn-success m-4" id="upload-file-btn">آپلود و بروزرساني جدول</button>
+                <button type="submit" class="btn btn-success mt-4" id="upload-file-btn">آپلود و بروزرساني جدول</button>
               </fieldset>
-            </div>
           </form>
         </div>
       </div>
@@ -77,21 +83,29 @@
       <div class="modal-body">
         <form class="needs-validation" id="add-form" enctype="multipart/form-data" novalidate>
           <div class="form-group">
-            <label for="new-name">نام كالا:</label>
-            <input type="text" class="form-control mb-2" id="pro-add" required>
+            <fieldset>
+              <label for="new-name">نام كالا:</label>
+              <input type="text" name="pro-add" class="form-control mb-2" id="pro-add" required>
+            </fieldset>
             <div class="invalid-feedback">
               وارد كردن نام كالا الزاميست !
             </div>
-            <label for="category-select">انتخاب دسته‌بندي:</label>
-            <select class="form-control" id="cat-add" required>
-              <option disabled selected value="">انتخاب كنيد</option>
-            </select>
+            <fieldset>
+              <label for="category-select">انتخاب دسته‌بندي:</label>
+              <select class="form-control" name="cat-add" id="cat-add" required>
+                <option disabled selected value="">انتخاب كنيد</option>
+              </select>
+            </fieldset>
             <div class="invalid-feedback">
               دسته‌بندي مربوطه را انتخاب كنيد!
             </div>
             <div class="custom-file">
-              <input type="file" name="file" class="custom-file-input" id="img-add">
-              <label class="custom-file-label text-secondary mt-4 text-center" for="img-add">تصوير كالا را انتخاب كنيد...</label>
+              <fieldset>
+                <input type="file" name="img-add" accept="image/*" class="custom-file-input" id="img-add">
+                <label class="custom-file-label text-secondary mt-4 text-center" for="img-add">
+                  تصوير كالا را انتخاب كنيد...
+                </label>
+              </fieldset>
             </div>
           </div>
           <div class="text-center">
@@ -180,5 +194,4 @@
         <p class="font-weight-bold mt-3">در حال بارگزاري...</p>
     </div>
 </div>
-
 {% endblock %}
