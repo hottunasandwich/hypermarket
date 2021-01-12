@@ -1,8 +1,11 @@
-from flask import Blueprint, jsonify, request, json
+from flask import Blueprint, jsonify, request, json, flash
+from werkzeug.exceptions import abort
 from werkzeug.utils import secure_filename
 from persiantools.jdatetime import JalaliDate
 from ..db import get_db
 import psycopg2.extras
+import os
+import pandas as pd
 
 api_bp = Blueprint('api', __name__)
 
@@ -23,26 +26,96 @@ def product_details(product_id):
 
 @api_bp.route('/product/get_category')
 def get_category():
-    with open("hypermarket/store/categories.json", encoding='utf-8') as file:
-        data = json.load(file)
-        x = []
-        for i in data:
-            y = str(i['name'])
-            for j in i['subcategories']:
-                x.append(y + ' / ' + j['name'])
-    return jsonify(x)
+    db = get_db()
+
+    def find_sub_groups(parent_id):
+        with db.cursor() as curs:
+            curs.execute("select * from category where parent_group=%s", (parent_id,))
+            return curs.fetchall()
+
+    # with open("hypermarket/store/categories.json", encoding='utf-8') as file:
+    #     data = json.load(file)
+    #     global category_list
+    #     category_list = []
+    #     for i in data:
+    #         y = str(i['name'])
+    #         for j in i['subcategories']:
+    #             category_list.append(y + ' / ' + j['name'])
+    with db.cursor() as cur:
+        parent_cat = find_sub_groups(0)
+        y = dict()
+        for i in parent_cat:
+            x = [f'{i[1]} / ', 0]
+            sub_group2 = find_sub_groups(i[0])
+            if sub_group2:
+                for j in sub_group2:
+                    x[0] = f"{i[1]} / {j[1]}"
+                    x[1] = j[0]
+                    print(x)
+                    sub_group3 = find_sub_groups(j[0])
+                    if sub_group3:
+                        for k in sub_group3:
+                            x[0] = f"{i[1]} / {j[1]} /{ k[1]}"
+                            x[1] = k[0]
+                            y[x[1]] = x[0]
+                    else:
+                        y[x[1]] = x[0]
+            else:
+                y[x[1]] = x[0]
+
+    return jsonify(y)
 
 
-@api_bp.route('/product/add', methods=['POST'])
-def product_add():
+@api_bp.route('/product/add_one', methods=["POST"])
+def product_add_one():
+    if request.method == "POST":
+        db = get_db()
+        category, category_id = request.form["cat-add"].split("|")
+        try:
+            f = request.files["img-add"]
+            dir_path = os.path.join(r"static\uploads\images", secure_filename(f.filename))
+            file_path = os.path.join(os.path.dirname(__file__).replace('api', 'admin'), dir_path)
+            f.save(file_path)
+            with db.cursor() as cur:
+                cur.execute("insert into product(product_name,image_link,category_id,category) values(%s,%s,%s,%s);",
+                            (request.form["pro-add"], dir_path, category_id, category,))
+                db.commit()
+        except FileNotFoundError:
+            with db.cursor() as cur:
+                cur.execute("insert into product(product_name,category_id,category) values(%s,%s,%s);",
+                            (request.form["pro-add"],category_id, category,))
+                db.commit()
+    return "OK"
+
+
+@api_bp.route('/product/add_file', methods=['POST'])
+def product_add_file():
     if request.method == 'POST':
         f = request.files["fileUpload"]
-        f.save("hypermarket/admin/static/uploads/files//" + secure_filename(f.filename))
-        # image, name, category = request.files["img"], request.form["name"], request.form["category"]
-        # image.save("hypermarket/admin/static/uploads/images/" + secure_filename(image.filename))
-        # print(name, category)
-        print("test")
-        return "OK"
+        try:
+            file_path = r"hypermarket\admin\static\uploads\files\\" + secure_filename(f.filename)
+            if os.path.splitext(file_path)[-1] in [".xls", ".xlsx", ".csv"]:
+                f.save(file_path)
+                read_file = pd.read_excel(file_path)
+                read_file.to_csv(file_path, index=None, header=True)
+            else:
+                raise NotImplementedError()
+        except:
+            abort(500, description="File Converting Was Not Successful!")
+        with open(file_path, encoding='UTF-8') as cvs_file:
+            for i in cvs_file.readlines():
+                data = i.split(",")
+                db = get_db()
+                with db.cursor() as cur:
+                    try:
+                        cur.execute(
+                            "insert into product(product_name,image_link,description,category) values(%s,%s,%s,%s);",
+                            (data[0], data[1], data[2], data[3],))
+                    except:
+                        abort(500, description="Operation Was Not Successful!")
+                        db.rollback()
+            db.commit()
+    return "OK"
 
 
 @api_bp.route('/product/edit', methods=['POST'])
@@ -79,7 +152,7 @@ def product_upload():
 def warehouse_list():
     db = get_db()
     with db.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-        cur.execute("select warehouse_name, warehouse_id from warehouse;")
+        cur.execute("select warehouse_name, warehouse_id from warehouse order by warehouse_id;")
         data = cur.fetchall()
     return jsonify(data)
 
@@ -128,7 +201,8 @@ def inventory_price_list():
         cur.execute("select pw.product_id, pw.ware_id, wh.warehouse_name, pr.product_name, pw.price, pw.number "
                     "from product_ware as pw "
                     "join product as pr on pw.product_id = pr.id "
-                    "join warehouse as wh on pw.ware_id = wh.warehouse_id;")
+                    "join warehouse as wh on pw.ware_id = wh.warehouse_id "
+                    "order by pw.id;")
         data = cur.fetchall()
         for i in data:
             i['price'] = '{:,d}'.format(int(i['price']))
@@ -190,7 +264,7 @@ def inventory_price_delete(product_id):
 def order_list():
     db = get_db()
     with db.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-        cur.execute("select order_id,username, total_cost, order_time from orders;")
+        cur.execute("select order_id,username, total_cost, order_time from orders order by order_id")
         data = cur.fetchall()
         for i in data:
             i['order_time'] = JalaliDate(i['order_time']).isoformat().replace('-', '/')

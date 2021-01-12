@@ -24,7 +24,7 @@
     {% block flash %}
     {% with messages = get_flashed_messages() %}
     {% for message in messages %}
-    <div class="w-50 mt-3 mx-auto">
+    <div class="w-50 mt-3 mx-auto alert-box">
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             {{ message }}
         </div>
@@ -38,4 +38,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
     {% endblock %}
     {% block extra_script %}{% endblock %}
+    <div class="w-25" id="alert">
+        <div class="alert alert-success text-center show" role="alert">
+          <i class="fa fa-check-circle" aria-hidden="true"></i>
+          عمليات با موفقيت انجام شد.
+        </div>
+    </div>
 </div>

@@ -6,3 +6,9 @@
 * {
     font-family: persianfont;
 }
+
+#alert {
+  position: fixed;
+  right: 5;
+  bottom: 0;
+}
