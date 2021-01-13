@@ -4,9 +4,10 @@
   <div class="row mt-4">
     <div>
       {% for category in category_path %}
-    <span class="text-muted"><a class="h4 m-1 text-decoration-none" href="{{ url_for('store.category_selector', category_name=category) }}">{{ category
-        }}</a>{% if not loop.last %}>{% endif %}</span>
-    {% endfor %}
+      <span class="text-muted"><a class="h4 m-1 text-decoration-none"
+          href="{{ url_for('store.category_selector', category_name=category) }}">{{ category
+          }}</a>{% if not loop.last %}>{% endif %}</span>
+      {% endfor %}
     </div>
   </div>
   <div class="row">
@@ -17,14 +18,18 @@
         <!-- category -->
         <br>
         <h1>{{product['price']}} تومان</h1>
-        <br> <br>
-
-        <input class="number" min="1" max="{{total['sum']}}" required="required" type="number" id="num"
-          name="number[0]">
-        <a class="btn btn-success create-action" href="#">
-          <i class="fa fa-plus fa-lg"></i> افزودن به سبد خرید
-        </a>
-
+        {% if in_cart %}
+        <div>
+          {{ in_cart }} عدد {{ product['product_name'] }} در سبد کالا شما موجود است
+        </div>
+        {% endif %}
+        <form action="{{ url_for('store.product_selector', product_id=product_id) }}" method='POST'>
+          <input class="number" min="1" max="{{total['sum']}}" required="required" type="number" id="num"
+            name="count">
+          <button type="submit" class="btn btn-success create-action">
+            {% if in_cart %}تغییر تعداد کالا{% else %}<i class="fa fa-plus fa-lg"></i> افزودن به سبد خرید{% endif %}
+          </button>
+        </form>
       </div>
       <img src="{{product['image_link']}}" />
     </div>

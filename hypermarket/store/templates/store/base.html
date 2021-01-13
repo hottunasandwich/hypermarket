@@ -15,18 +15,18 @@
                     class="h1">فروشگاه سبزی</span></a>
             <div class="d-flex">
                 <a class="btn btn-secondary m-1 text-blue" href="{{ url_for('admin.login') }}" role="button">مدیریت</a>
-                <a class="btn btn-secondary m-1 text-blue" href="{{ url_for('store.cart_creation') }}" role="button">
-                    <i class="fa fa-shopping-cart" aria-hidden="true"></i> سبد خرید</a>
+                <a class="btn btn-secondary m-1 text-blue" href="{{ url_for('store.cart_creation') }}" role="button" style="position: relative;">
+                    <div class="cart-no" id="in-cart">{{ whole_cart|length }}</div><i class="fa fa-shopping-cart" aria-hidden="true"></i> سبد خرید</a>
             </div>
         </nav>
         {% endblock %}
         {% block content %}{% endblock %}
 
         {% block flash %}
-        {% with messages = get_flashed_messages() %}
-        {% for message in messages %}
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        {% for category, message in messages %}
         <div class="w-50 mt-3" style="margin: auto;">
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
                 {{ message }}
             </div>
         </div>
@@ -40,5 +40,20 @@
             crossorigin="anonymous"></script>
         {% endblock %}
         {% block extra_script %}{% endblock %}
+        <style>
+            .cart-no{
+                position: absolute;
+                z-index: 2;
+                top: -12.5px;
+                left: -12.5px;
+                width: 25px;
+                height: 25px;
+                border-radius: 12.5px;
+                background-color: red;
+                color: white;
+                line-height: 30px;
+                font-size: 20px;
+            }
+        </style>
     </div>
 </body>
