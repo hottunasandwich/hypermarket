@@ -45,11 +45,14 @@
         <form class="needs-validation" id="mod-form" novalidate>
           <label for="new-price" class="mt-2"><b>قيمت:</b></label>
           <input type="number" class="form-control mr-3" min="0" id="new-price" placeholder=" قيمت جديد..." required>
-          <div class="invalid-feedback">
+          <div class="invalid-feedback mr-3">
             قيمت جديد كالا را وارد كنيد !
           </div>
           <label for="new-inventory" class="mt-2"><b>موجودي در انبار:</b></label>
-          <input type="number" class="form-control mr-3" min="0" id="new-inventory" placeholder=" تعداد موجودي جديد...">
+          <input type="number" class="form-control mr-3" min="0" id="new-inventory" placeholder=" تعداد موجودي جديد..." required>
+          <div class="invalid-feedback mr-3">
+            تعداد موجودي را وارد كنيد!
+          </div>
           <div class="col-12 mt-2 text-center">
             <button type="submit" class="btn btn-info pb-2 px-5" id="final-modify">ذخيره تغييرات</button>
           </div>
