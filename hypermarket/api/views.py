@@ -345,6 +345,8 @@ def order_details(order_id):
 
     return jsonify(data)
 
+
+# To delete cart from session!
 @api_bp.route('/cart/delete/<int:product_id>')
 def delete_product_from_cart(product_id):
     if str(product_id) in session['cart']:
