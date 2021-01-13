@@ -41,6 +41,7 @@ function sendModified(){
             e.preventDefault()
             $.post(url4, {'name': $("#new-name").val(), 'category': $("#category-select").val(),
                                                     'id': $modifyId.replace('M',''),},alertSuccess)
+            $("#mod-form")[0].reset()
             $("#final-pro-mod").attr("data-dismiss", "modal")
         }
     })

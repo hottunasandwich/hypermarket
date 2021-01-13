@@ -48,7 +48,7 @@ function sendModified(){
             $("#final-modify").attr("data-dismiss", "modal")
         }
         else {
-            e.preventDefault()
+            null
         }
     })
 }

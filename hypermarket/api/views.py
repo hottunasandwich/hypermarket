@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, json, flash
+from flask import Blueprint, jsonify, request
 from werkzeug.exceptions import abort
 from werkzeug.utils import secure_filename
 from persiantools.jdatetime import JalaliDate
@@ -34,31 +34,30 @@ def get_category():
     #     global category_list
     #     category_list = []
     #     for i in data:
-    #         y = str(i['name'])
+    #         data = str(i['name'])
     #         for j in i['subcategories']:
-    #             category_list.append(y + ' / ' + j['name'])
-    with db.cursor() as cur:
-        parent_cat = find_sub_groups(0)
-        y = dict()
-        for i in parent_cat:
-            x = [f'{i[1]} / ', 0]
-            sub_group2 = find_sub_groups(i[0])
-            if sub_group2:
-                for j in sub_group2:
-                    x[0] = f"{i[1]} / {j[1]}"
-                    x[1] = j[0]
-                    sub_group3 = find_sub_groups(j[0])
-                    if sub_group3:
-                        for k in sub_group3:
-                            x[0] = f"{i[1]} / {j[1]} /{k[1]}"
-                            x[1] = k[0]
-                            y[x[1]] = x[0]
-                    else:
-                        y[x[1]] = x[0]
-            else:
-                y[x[1]] = x[0]
+    #             category_list.append(data + ' / ' + j['name'])
+    parent_cat = find_sub_groups(0)
+    data = dict()
+    for i in parent_cat:
+        field = [f'{i[1]} / ', 0]
+        sub_group2 = find_sub_groups(i[0])
+        if sub_group2:
+            for j in sub_group2:
+                field[0] = f"{i[1]} / {j[1]}"
+                field[1] = j[0]
+                sub_group3 = find_sub_groups(j[0])
+                if sub_group3:
+                    for k in sub_group3:
+                        field[0] = f"{i[1]} / {j[1]} /{k[1]}"
+                        field[1] = k[0]
+                        data[field[1]] = field[0]
+                else:
+                    data[field[1]] = field[0]
+        else:
+            data[field[1]] = field[0]
 
-    return jsonify(y)
+    return jsonify(data)
 
 
 @api_bp.route('/product/add_one', methods=["POST"])
@@ -67,15 +66,17 @@ def product_add_one():
         db = get_db()
         category, category_id = request.form["cat-add"].split("|")
         try:
-            f = request.files["img-add"]
-            dir_path = os.path.join(r"static\uploads\images", secure_filename(f.filename))
+            img = request.files["img-add"]
+            dir_path = os.path.join(r"static\uploads\images", secure_filename(img.filename))
             file_path = os.path.join(os.path.dirname(__file__).replace('api', 'admin'), dir_path)
-            f.save(file_path)
+            if os.path.splitext(file_path.lower())[-1] in ["jpeg", "png", "gif", "jpg", "svg"]:
+                raise TypeError()
+            img.save(file_path)
             with db.cursor() as cur:
                 cur.execute("insert into product(product_name,image_link,category_id,category) values(%s,%s,%s,%s);",
                             (request.form["pro-add"], dir_path, category_id, category,))
                 db.commit()
-        except FileNotFoundError:
+        except (FileNotFoundError, TypeError):
             with db.cursor() as cur:
                 cur.execute("insert into product(product_name,category_id,category) values(%s,%s,%s);",
                             (request.form["pro-add"], category_id, category,))
@@ -89,7 +90,7 @@ def product_add_file():
         f = request.files["fileUpload"]
         try:
             file_path = r"hypermarket\admin\static\uploads\files\\" + secure_filename(f.filename)
-            if os.path.splitext(file_path)[-1] in [".xls", ".xlsx", ".csv"]:
+            if os.path.splitext(file_path.lower())[-1] in [".xls", ".xlsx", ".csv"]:
                 f.save(file_path)
                 read_file = pd.read_excel(file_path)
                 read_file.to_csv(file_path, index=None, header=True)
@@ -116,12 +117,13 @@ def product_add_file():
 @api_bp.route('/product/edit', methods=['POST'])
 def product_edit():
     if request.method == 'POST':
-        product_id, name, category = request.form["id"], request.form["name"], request.form["category"]
+        product_id, name, all_category = request.form["id"], request.form["name"], request.form["category"]
+        category, category_id = all_category.split("|")
         db = get_db()
         with db.cursor() as cur:
-            cur.execute("update product set product_name = %s, category = %s where id=%s;",
-                        (name, category, product_id,))
-            db.commit()
+            cur.execute("update product set product_name = %s, category = %s, category_id = %s where id=%s;",
+                        (name, category, category_id, product_id,))
+            # db.commit()
     else:
         return 'NOT OK'
     return 'OK'
@@ -215,13 +217,19 @@ def inventory_price_detail():
 @api_bp.route('/inventory_price/add', methods=['POST'])
 def inventory_price_add():
     if request.method == 'POST':
-        product_id, ware_id, number, price = request.form["pro_id"], request.form["ware_id"], \
-                                             request.form["number"], request.form["price"]
-        db = get_db()
-        with db.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-            cur.execute("insert into product_ware(product_id,ware_id, number, price) values(%s,%s,%s,%s);",
-                        (product_id, ware_id, number, price))
-            db.commit()
+        try:
+            product_id, ware_id, number, price = request.form["pro_id"], request.form["ware_id"], \
+                                                 request.form["number"], request.form["price"]
+            for i in [product_id, ware_id, number, price]:
+                if not isinstance(i, int):
+                    raise ValueError
+            db = get_db()
+            with db.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+                cur.execute("insert into product_ware(product_id,ware_id, number, price) values(%s,%s,%s,%s);",
+                            (product_id, ware_id, number, price))
+                db.commit()
+        except ValueError:
+            abort(500, description="Invalid number input!")
             return "OK"
     return "NOT OK"
 
@@ -229,14 +237,20 @@ def inventory_price_add():
 @api_bp.route('/inventory_price/edit', methods=['POST'])
 def inventory_price_edit():
     if request.method == 'POST':
-        pro_id, price, number, ware_id = request.form["product_id"], request.form["new_price"], \
-                                         request.form["new-inventory"], request.form["ware_id"]
-        db = get_db()
-        with db.cursor() as cur:
-            cur.execute("update product_ware set "
-                        "price = %s , number = %s where product_id= %s and ware_id = %s;",
-                        (price, number, pro_id, ware_id,))
-            db.commit()
+        try:
+            pro_id, price, number, ware_id = request.form["product_id"], request.form["new_price"], \
+                                             request.form["new-inventory"], request.form["ware_id"]
+            for i in [pro_id, price, number, ware_id]:
+                if not isinstance(i, int):
+                    raise ValueError
+            db = get_db()
+            with db.cursor() as cur:
+                cur.execute("update product_ware set "
+                            "price = %s , number = %s where product_id= %s and ware_id = %s;",
+                            (price, number, pro_id, ware_id,))
+                db.commit()
+        except ValueError:
+            abort(500, description="Invalid number input!")
         return "OK"
     return "NOT OK"
 
@@ -244,12 +258,11 @@ def inventory_price_edit():
 @api_bp.route('/inventory_price/delete', methods=['POST'])
 def inventory_price_delete():
     pro_id, ware_id = request.form['allId'].split(".")
-    print(pro_id)
     db = get_db()
     with db.cursor() as cur:
         try:
             cur.execute("delete from product_ware where product_id= %s and ware_id =%s;", (pro_id, ware_id,))
-            # db.commit()
+            db.commit()
         except:
             abort(500, description="product was ordered , Unable to delete ordered products!")
     return "OK"
