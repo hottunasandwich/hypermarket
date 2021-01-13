@@ -30,7 +30,7 @@
     <div class="row">
       <div class="col-6">
         <h6>تاریخ تحویل:</h6>
-        <input type="text" class="form-control" id="date" name="date" value="salam aleykuuum">
+        <input type="text" class="form-control" id="date" name="date">
       </div>
     </div>
     <button class="d-grid col-2 mx-auto btn btn-outline-dark m-3" id="button"
@@ -38,4 +38,19 @@
   </form>
 </div>
 <br> <br>
+{% endblock %}
+{% block extra_script %}
+<script src="https://unpkg.com/persian-date@latest/dist/persian-date.min.js"></script>
+<script src="https://unpkg.com/persian-datepicker@latest/dist/js/persian-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/persian-datepicker@latest/dist/css/persian-datepicker.min.css">
+<script>
+  $(document).ready(function () {
+    var pd = $("#date").pDatepicker({
+      checkDate: function (unix) {
+        return new persianDate(unix) > new persianDate()
+      },
+      format: 'YYYY/M/D'
+    });
+  });
+</script>
 {% endblock %}

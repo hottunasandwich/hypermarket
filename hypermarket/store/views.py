@@ -2,6 +2,8 @@ from flask import Blueprint, request, render_template, redirect, url_for, flash,
 from werkzeug.utils import secure_filename
 from hypermarket.admin.forms import LoginForm
 from hypermarket.login_required import login_required
+from persiantools.jdatetime import JalaliDate
+from unidecode import unidecode
 import os
 import json
 from ..db import get_db
@@ -123,8 +125,7 @@ def product_selector(product_id):
 
             session['cart'][product_id] = (
                 client_order_count, product['ware_id'])
-            flash(
-                f'{product["product_name"]} {request.form["count"]}', 'success')
+            flash('به سبد خرید شما اضافه شد', 'success')
 
         except ValueError:
             flash('تعداد کالا ها قابل قبول نیست', 'danger')
@@ -166,31 +167,33 @@ def cart_approve_function():
             db = get_db()
             with db:
                 with db.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
-                    product_ware_id = []
+                    details = []
                     for product_id, value in session['cart'].items():
                         cursor.execute(
-                            f"""select price, id, number from product_ware
+                            f"""select price, product_ware.id, number, product_name, image_link from product_ware
+                            join product on product.id=product_ware.product_id
                             where product_id={int(product_id)} and ware_id={value[1]}
                             """)
                         _ = cursor.fetchone()
                         total_price = total_price + (int(value[0]) * int(_['price']))
-                        product_ware_id.append((_['id'], _['number'] - int(value[0])))
+                        details.append((_['id'], _['number'] - int(value[0]), _['product_name'], _['image_link'], int(value[0])))
 
+                    jalali_time = [int(i) for i in unidecode(request.form['date']).split('/')]
                     cursor.execute("""INSERT INTO orders (username,phone_number,address,delivery_time,order_time,total_cost)
                     VALUES (%s,%s,%s,%s,%s,%s) RETURNING order_id;""",
-                                   (request.form['first_name'] + " " + request.form['last_name'], request.form['phone'], request.form['address'], datetime.now(), datetime.now(), total_price))
+                                   (request.form['first_name'] + " " + request.form['last_name'], request.form['phone'], request.form['address'], JalaliDate(jalali_time[0], jalali_time[1], jalali_time[2]).to_gregorian(), datetime.now(), total_price))
                     order_id = cursor.fetchone()['order_id']
 
                     for index, o in enumerate(session['cart'].items(), start=0):
                         cursor.execute("""INSERT INTO cart (product_ware_id, order_id, count)
                         VALUES (%s,%s,%s)""",
-                                    (product_ware_id[index][0], order_id, o[1][0]))
+                                    (details[index][0], order_id, o[1][0]))
                     
-                        cursor.execute("""UPDATE product_ware SET number=%s WHERE id=%s""", (product_ware_id[index][1], product_ware_id[index][0]))
+                        cursor.execute("""UPDATE product_ware SET number=%s WHERE id=%s""", (details[index][1], details[index][0]))
 
                     session.pop('cart', None)
                     session.pop('cart_approved', None)
-                    return redirect(url_for('store.home'))
+                    return render_template('store/order_success.html', cart_detail=details, client_info=request.form, total_price=total_price, delivery_date=request.form['date'])
 
         return render_template('store/cart_approve.html', whole_cart=session['cart'])
 

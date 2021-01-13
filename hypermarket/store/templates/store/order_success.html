@@ -1,0 +1,35 @@
+{% extends 'store/base.html' %}
+{% block navbar %}{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="alert alert-success" role="alert">سفارش شما با موفقیت ثبت شد.</div>
+    <div>
+        <div>
+            <span class="mx-3 font-weight-bold">نام و نام خانوادگی:</span><span>{{ client_info['first_name'] }} {{ client_info['last_name'] }}</span>
+        </div>
+        <div>
+            <span class="mx-3 font-weight-bold">تلفن:</span><span>{{ client_info['phone'] }}</span>
+        </div>
+        <div>
+            <span class="mx-3 font-weight-bold">آدرس:</span><span>{{ client_info['address'] }}</span>
+        </div>
+        <div>
+            <span class="mx-3 font-weight-bold">تاریخ تحویل:</span><span>{{ delivery_date }}</span>
+        </div>
+        <div>
+            <span class="mx-3 font-weight-bold">جمع مبلغ:</span><span>{{ total_price }} تومان</span>
+        </div>
+    </div>
+    <div class="d-flex">
+        {% for good in cart_detail %}
+        <div class="card shadow-sm p-3 mb-5 bg-white rounded" style="width: 300px;">
+            <img src="{{ good[3] }}" alt="" class="card-img-top" width="900">
+            <div class="card-body">
+                <h5 class="card-title"><span class="text-danger">{{ good[4] }}</span> عدد {{ good[2] }}</h5>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="my-5"><a href="{{ url_for('store.home') }}" class="btn btn-primary">بازگشت به سایت</a></div>
+</div>
+{% endblock %}
