@@ -24,6 +24,7 @@ function makeTable(url){
 makeTable(url1)
 
 function deleteAction() {
+    alertError()
     var $delButton = $(this)
     var allId= $delButton.attr("id")
     $("#final-del").click(function(){
@@ -42,7 +43,11 @@ function sendModified(){
         if ($("#new-price").val() && $("#new-inventory").val()){
             e.preventDefault()
             $.post(url3, {'product_id': $allId[0], 'ware_id': $allId[1],
-            'new_price': $("#new-price").val(), 'new-inventory': $("#new-inventory").val()}, alertSuccess)
+            'new_price': $("#new-price").val(), 'new-inventory': $("#new-inventory").val()})
+            .done(alertSuccess)
+            .fail(function(jqXHR, textStatus, errorThrown){
+                alertError()
+            })
             makeTable(url1)
             $("#mod-form")[0].reset()
             $("#final-modify").attr("data-dismiss", "modal")
@@ -73,7 +78,11 @@ function addInventory(e){
         var $price_add = $("#inv-price").val()
         var $num_add = $("#inv-number").val()
         $.post(url5, {'pro_id': $pro_add.split("/")[0], 'ware_id': $ware_add.split("/")[0],
-        'price': $price_add, 'number': $num_add}, alertSuccess)
+        'price': $price_add, 'number': $num_add})
+        .done(alertSuccess)
+        .fail(function(jqXHR, textStatus, errorThrown){
+            alertError()
+        })
         makeTable(url1)
         $("#final-inv-add").attr("data-dismiss", "modal")
         $("#add-form")[0].reset()

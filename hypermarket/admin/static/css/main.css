@@ -17,6 +17,12 @@ img {
   padding: 8px;
 }
 
+.ord-table td, th {
+  text-align: center;
+  border: 1px solid #dddddd;
+  padding: 8px;
+}
+
 #alert-success {
   display: none;
   z-index: 99 !important;
