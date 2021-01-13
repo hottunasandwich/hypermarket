@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, json, flash, session
 from werkzeug.exceptions import abort
 from werkzeug.utils import secure_filename
 from persiantools.jdatetime import JalaliDate
@@ -71,7 +71,7 @@ def product_add_one():
         try:
             # Add product with image.
             img = request.files["img-add"]
-            dir_path = os.path.join(r"static\uploads\images", secure_filename(img.filename))
+            dir_path = os.path.join('static', 'upload', 'images', secure_filename(img.filename))
             file_path = os.path.join(os.path.dirname(__file__).replace('api', 'admin'), dir_path)
             if os.path.splitext(file_path.lower())[-1] not in ["jpeg", "png", "gif", "jpg", "svg"]:
                 raise TypeError()
@@ -95,7 +95,8 @@ def product_add_file():
     if request.method == 'POST':
         f = request.files["fileUpload"]
         try:
-            file_path = r"hypermarket\admin\static\uploads\files\\" + secure_filename(f.filename)
+            
+            file_path = os.path.join('hypermarket', 'admin', 'static', 'uploads', 'files', secure_filename(f.filename))
             if os.path.splitext(file_path.lower())[-1] in [".xls", ".xlsx", ".csv"]:
                 f.save(file_path)
                 # Convert excel file into csv format.
@@ -343,3 +344,13 @@ def order_details(order_id):
                                                   JalaliDate(i['order_time']).isoformat().replace('-', '/')
 
     return jsonify(data)
+
+@api_bp.route('/cart/delete/<int:product_id>')
+def delete_product_from_cart(product_id):
+    if str(product_id) in session['cart']:
+        session['cart'].pop(str(product_id))
+        session['cart'] = session['cart']
+        return 'ok'
+
+    else:
+        return 'not ok'

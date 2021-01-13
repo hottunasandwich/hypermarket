@@ -24,6 +24,7 @@
   }
 </style>
 
+{% if whole_cart %}
 <div class="col-10 m-auto">
   <table>
     <tr>
@@ -32,13 +33,13 @@
       <th>تعداد</th>
       <th colspan="2"></th>
     </tr>
-    {% for inventory in inventories %}
-    <tr>
-      <td>{{ inventory }}</td>
-      <td>10,000</td>
-      <td>20</td>
-      <td><a href="#">ويرايش</a></td>
-      <td><a href="#">حذف</a></td>
+    {% for product in products %}
+    <tr class='good'>
+      <td>{{ product['product_name'] }}</td>
+      <td class="price">{{ product['price'] }}</td>
+      <td class="count">{{ product['count'] }}</td>
+      <td><a href="{{ url_for('store.product_selector', product_id=product['id']) }}">ويرايش</a></td>
+      <td class="delete" data-id='{{product["id"]}}'><button class="btn btn-link" type="button">حذف</button></td>
     </tr>
     {% endfor %}
   </table>
@@ -47,16 +48,43 @@
 <div class="row mb-5">
   <div class="col-10 m-auto mt-4 d-flex justify-content-end">
     <h3 class="ms-auto p-2 bd-highlight">جمع کل:</h3>
-    <p></p>
-    <a
-      class="btn btn-outline-dark m-3"
-      style="background-color: forestgreen; color: white"
-      href="{{url_for('store.cart_approve_function')}}"
-      role="button"
-      >نهایی کردن سبد خرید</a
-    >
+    <p id="w_price"></p>
+    <a class="btn btn-outline-dark m-3" style="background-color: forestgreen; color: white"
+      href="{{url_for('store.cart_approve_function')}}" role="button">نهایی کردن سبد خرید</a>
   </div>
 </div>
+{% else %}
+<div class="container">کالایی در سبد شما موجود نیست</div>
+{% endif %}
+{% endblock %}
+{% block extra_script %}
+<script>
+  $('.good > .delete').click(function () {
+    var $this =$(this) 
+    var $id = $this.attr('data-id')
+    $.get(`/api/cart/delete/${$id}`, function(data){
+      if (data == 'ok') {
+        var cart_count = $('#in-cart').text()
+        $('#in-cart').text(cart_count - 1)
+        $this.parent('.good').remove()
+        calculate_whole_price()
+      } else {
+        alert('کالا شما حذف نشد')
+      }
+    })
+  })
+  window.onload = function(){
+    calculate_whole_price()
+  }
+
+  function calculate_whole_price() {
+    var $w_price = 0
+    $('.good').each(function(index, elem){
+      $w_price += $(elem).children('.price').text() * $(elem).children('.count').text()
+    })
+    $('#w_price').text($w_price + 'تومان')
+  }
+  </script>
 {% endblock %}
 <!-- navbar expand/light?? -->
 <!-- justify content start?? -->

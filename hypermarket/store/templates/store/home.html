@@ -1,6 +1,6 @@
 {% extends "store/base.html" %}
 {% block content %}
-<div class="container">
+<div class="container mt-5">
   {% for category in total_product.keys() %}
   <a class="text-decoration-none" href="{{url_for('store.category_selector', category_name=category)}}">
     <h1>کالاهای گروه {{category}}</h1>

@@ -2,7 +2,7 @@
 {% block content %}
 <br><br><br><br>
 <div class="container">
-  <form>
+  <form method="POST">
     <div class="row">
       <div class="col">
         <h6>نام:</h6>
@@ -19,7 +19,7 @@
     <div class="row">
       <div class="col">
         <h6>آدرس:</h6>
-        <textarea class="form-control" id="address" cols="3" rows="5"></textarea>
+        <textarea class="form-control" id="address" name="address" cols="3" rows="5"></textarea>
       </div>
       <div class="col">
         <h6>تلفن همراه:</h6>
@@ -33,13 +33,9 @@
         <input type="text" class="form-control" id="date" name="date" value="salam aleykuuum">
       </div>
     </div>
-
+    <button class="d-grid col-2 mx-auto btn btn-outline-dark m-3" id="button"
+      style="background-color: forestgreen; color: white;" type="submit">ثبت نهایی سفارش</button>
   </form>
 </div>
 <br> <br>
-<button class="d-grid col-2 mx-auto btn btn-outline-dark m-3" id="button"
-  style="background-color: forestgreen; color: white;" type="button">ثبت نهایی سفارش</button>
-{% endblock %}
-{% block extra_script %}
-<script src="{{ url_for('static', filename='js/order_approve.js') }}"></script>
 {% endblock %}

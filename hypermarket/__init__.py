@@ -1,10 +1,16 @@
-from flask import Flask
+from flask import Flask, session
 import os
 
+
+def set_cart():
+    if 'cart' not in session:
+        session['cart'] = {}
+    # print(f'cart value set to: {session["cart"]}')
 
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
+    app.before_request(set_cart)
     app.config.from_pyfile('config.py', silent=True)
     app.config.from_mapping(
         DB_NAME="hyper_sabzi",
