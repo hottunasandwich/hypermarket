@@ -5,7 +5,7 @@ url4 = 'http://127.0.0.1:5000/api/product/edit'
 url5 = 'http://127.0.0.1:5000/api/product/add_file'
 url6 = 'http://127.0.0.1:5000/api/product/add_one'
 
-
+// To create the main product table.
 function makeTable(url){
     $.get(url).done(function(resp){
     $('.mytable').empty()
@@ -19,11 +19,13 @@ function makeTable(url){
     })
     $table += "</table>"
     var $rowOption = $('.mytable').append($table)
+    // Set function for delete and modify buttons.
     $rowOption.find(".delete-me").click(deleteAction)
     $rowOption.find(".modify-me").click(sendModified)
     })
 }makeTable(url1)
 
+// Function to send delete data to back server.
 function deleteAction() {
     var $delButton = $(this)
     var funcUrl= url2 + $delButton.attr("id")
@@ -36,6 +38,7 @@ function deleteAction() {
     })
 }
 
+// Send modified data to back server.
 function sendModified(){
     var $modButton = $(this)
     var $modifyId = $modButton.attr("id")
@@ -52,16 +55,20 @@ function sendModified(){
 }
 
 $.get(url3, function(resp){
+    // Set categories for selection area of category.
     for (const i in resp) {
         var $option = "<option>"+ (resp[i] + " | " + i) + "</option>"
         $("#cat-add, #category-select").append($option)
     }
     $(".custom-file-input").on("change", function() {
+    // Change file input labels text .
     var fileName = $(this).val().split("\\").pop()
     $(this).siblings(".custom-file-label").addClass("selected").html(fileName)
     })
 })
 
+
+// To send a new single product's data to back server.
 $(function() {
     $("#final-pro-add").click(function(e) {
         var formData = new FormData($('#add-form')[0])
@@ -88,6 +95,8 @@ $(function() {
     })
 })
 
+
+// This function will send an excel file of products to back server...
 $(function() {
     $('#upload-file-btn').click(function(e) {
         if ($("#fileUpload").val()) {

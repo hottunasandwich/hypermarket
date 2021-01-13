@@ -3,6 +3,7 @@ url2 = "http://127.0.0.1:5000/api/order/"
 url3 = "http://127.0.0.1:5000/api/order/table/"
 url4 = "http://127.0.0.1:5000/product/"
 
+// To create the main orders table.
 function makeTable(url){
     $.get(url).done(function(resp){
     $('.mytable').empty()
@@ -13,11 +14,13 @@ function makeTable(url){
         $table += '<i class="fa fa-eye" aria-hidden="true"></i> برسي سفارش</button></td></tr>'
     })
     $table += "</table>"
+        // Set function for taking a look to order detail.
     var $rowOption = $('.mytable').append($table)
     $rowOption.find(".show-order").click(orderDetail)
     });
 };makeTable(url1)
 
+// This function will create a table of ordered product and show the owner of order.
 function orderDetail(){
     var $curButton = $(this)
     $.get(url2 + $curButton.attr("id"), function(resp) {

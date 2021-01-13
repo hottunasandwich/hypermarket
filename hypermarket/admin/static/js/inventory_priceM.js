@@ -4,6 +4,7 @@ url3 = 'http://127.0.0.1:5000/api/inventory_price/edit'
 url4 = 'http://127.0.0.1:5000/api/inventory_price/detail'
 url5 = 'http://127.0.0.1:5000/api/inventory_price/add'
 
+// To create the main inventory-price table.
 function makeTable(url){
     $.get(url).done(function(resp){
     $('.mytable').empty()
@@ -17,12 +18,14 @@ function makeTable(url){
     })
     $table += "</table>"
     var $rowOption = $('.mytable').append($table)
+    // Set function for delete and modify buttons.
     $rowOption.find(".delete-me").click(deleteAction)
     $rowOption.find(".modify-me").click(sendModified)
     })
 }
 makeTable(url1)
 
+// Function to send delete data to back server.
 function deleteAction() {
     alertError()
     var $delButton = $(this)
@@ -35,6 +38,7 @@ function deleteAction() {
     })
 }
 
+// Send modified data to back server.
 function sendModified(){
     var $modButton = $(this)
     var $modifyId = $modButton.attr("id")
@@ -60,15 +64,18 @@ function sendModified(){
 
 $.get(url4, function(resp){
     resp[0].forEach(function(i){
+        // Set products for selection area of product.
         var $option1 = "<option>"+ i.id + "/ " +i.product_name+"</option>"
         $("#pro-select").append($option1)
     })
     resp[1].forEach(function(j){
+            // Set warehouses for selection area of warehouse.
         var $option2 = "<option>"+ j.warehouse_id + "/ " +j.warehouse_name+"</option>"
         $("#ware-select").append($option2)
     })
 })
 
+// This function will send data of new inventory-price to back server.
 $("#final-inv-add").click(addInventory)
 function addInventory(e){
     if ($("#pro-select").val() && $("#ware-select").val() && $("#inv-price").val() && $("#inv-number").val()){

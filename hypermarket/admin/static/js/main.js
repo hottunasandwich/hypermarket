@@ -1,3 +1,6 @@
+//=======> This is general Js file for all admin pages.  <=======//
+
+// This function will show the successful notifications.
 async function alertSuccess(){
     $("#alert-success").slideDown(1500)
     $("#alert-success").click(() => $("#alert-success").hide())
@@ -5,6 +8,7 @@ async function alertSuccess(){
     $("#alert-success").slideUp(1500)
 }
 
+// This function will show the error notifications.
 async function alertError(){
     $("#alert-error").slideDown(1500)
     $("#alert-error").click(() => $("#alert-error").hide())
@@ -12,7 +16,7 @@ async function alertError(){
     $("#alert-error").slideUp(1500)
 }
 
-
+// Bootstrap default function for validation!
 (function() {
   window.addEventListener('load', function() {
     var forms = document.getElementsByClassName('needs-validation');

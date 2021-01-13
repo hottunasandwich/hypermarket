@@ -3,6 +3,7 @@ url2 = 'http://127.0.0.1:5000/api/warehouse/delete/'
 url3 = 'http://127.0.0.1:5000/api/warehouse/add'
 url4 = 'http://127.0.0.1:5000/api/warehouse/edit'
 
+// To create the main warehouse table.
 function makeTable(url){
     $.get(url).done(function(resp){
     $('.mytable').empty()
@@ -13,12 +14,14 @@ function makeTable(url){
     })
     $table += "</table>"
     var $rowOption = $('.mytable').append($table)
+    // Set function for delete and modify buttons.
     $rowOption.find(".delete-me").click(deleteAction)
     $rowOption.find(".modify-me").click(sendModified)
     })
 }
 makeTable(url1)
 
+// Function to send delete data to back server.
 function deleteAction() {
     var $delButton = $(this)
     var funcUrl= url2 + $delButton.attr("id")
@@ -29,6 +32,8 @@ function deleteAction() {
     })
 }
 
+
+// A function to send a new warehouse name to the back server.
 $("#final-add").click(sendNew)
 function sendNew(e){
     if ($("#nameWH").val()) {
@@ -44,6 +49,7 @@ function sendNew(e){
     }
 }
 
+// Send modified data to back server.
 function sendModified(){
     var $modButton = $(this)
     var $modifyId = $modButton.attr("id")
