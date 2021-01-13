@@ -47,14 +47,13 @@
 
 <div class="row mb-5">
   <div class="col-10 m-auto mt-4 d-flex justify-content-end">
-    <h3 class="ms-auto p-2 bd-highlight">جمع کل:</h3>
-    <p id="w_price"></p>
+    <div class="ms-auto p-2 bd-highlight"><span class="h3">جمع کل:</span> <span id="w_price" class="h2"></span></div>
     <a class="btn btn-outline-dark m-3" style="background-color: forestgreen; color: white"
       href="{{url_for('store.cart_approve_function')}}" role="button">نهایی کردن سبد خرید</a>
   </div>
 </div>
 {% else %}
-<div class="container">کالایی در سبد شما موجود نیست</div>
+<div class="container h1">کالایی در سبد شما موجود نیست</div>
 {% endif %}
 {% endblock %}
 {% block extra_script %}

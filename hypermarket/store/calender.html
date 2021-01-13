@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://unpkg.com/persian-date@latest/dist/persian-date.min.js"></script>
+    <script src="https://unpkg.com/persian-datepicker@latest/dist/js/persian-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/persian-datepicker@latest/dist/css/persian-datepicker.min.css">
+</head>
+
+<body>
+    <script type="text/javascript">
+        $(window).formatPersian = false;
+        $(document).ready(function () {
+            var pd = $(".example1").pDatepicker({
+                checkDate: function (unix) {
+                    return new persianDate(unix) > new persianDate()
+                },
+                format: 'YYYY/M/D'
+            });
+        });
+
+    </script>
+
+    <input type="text" class="example1" />
+</body>
+
+</html>
