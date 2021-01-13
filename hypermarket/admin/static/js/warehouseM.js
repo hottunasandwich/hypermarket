@@ -15,8 +15,8 @@ function makeTable(url){
     var $rowOption = $('.mytable').append($table)
     $rowOption.find(".delete-me").click(deleteAction)
     $rowOption.find(".modify-me").click(sendModified)
-    });
-};
+    })
+}
 makeTable(url1)
 
 function deleteAction() {
@@ -25,7 +25,7 @@ function deleteAction() {
     $("#final-del").click(function(e){
         e.preventDefault()
         $.get(funcUrl.replace('D',''), () => $delButton.closest('tr').remove())
-        alertSuccess()
+        .done(alertSuccess)
     })
 }
 
@@ -33,10 +33,14 @@ $("#final-add").click(sendNew)
 function sendNew(e){
     if ($("#nameWH").val()) {
         e.preventDefault()
-        $.post(url3, {'nameWH': $("#nameWH").val()},alertSuccess)
+        $.post(url3, {'nameWH': $("#nameWH").val()})
+        .done(alertSuccess)
+        .fail(function(jqXHR, textStatus, errorThrown){
+            alertError()
+        })
         $("#add-WH-form")[0].reset()
-        makeTable(url1)
         $("#final-add").attr("data-dismiss", "modal")
+        makeTable(url1)
     }
 }
 
@@ -47,9 +51,12 @@ function sendModified(){
         if ($("#nameModify").val()) {
             e.preventDefault()
             $.post(url4, {'nameModify': $("#nameModify").val(), 'rowId': $modifyId.replace('M','')})
-            $("#mod-form")[0].reset()
-            alertSuccess()
+            .done(alertSuccess)
+            .fail(function(jqXHR, textStatus, errorThrown){
+                alertError()
+            })
             makeTable(url1)
+            $("#mod-form")[0].reset()
             $("#final-modify").attr("data-dismiss", "modal")
         }
     })

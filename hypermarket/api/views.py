@@ -69,7 +69,7 @@ def product_add_one():
             img = request.files["img-add"]
             dir_path = os.path.join('static', 'upload', 'images', secure_filename(img.filename))
             file_path = os.path.join(os.path.dirname(__file__).replace('api', 'admin'), dir_path)
-            if os.path.splitext(file_path.lower())[-1] in ["jpeg", "png", "gif", "jpg", "svg"]:
+            if os.path.splitext(file_path.lower())[-1] not in ["jpeg", "png", "gif", "jpg", "svg"]:
                 raise TypeError()
             img.save(file_path)
             with db.cursor() as cur:
@@ -124,7 +124,7 @@ def product_edit():
         with db.cursor() as cur:
             cur.execute("update product set product_name = %s, category = %s, category_id = %s where id=%s;",
                         (name, category, category_id, product_id,))
-            # db.commit()
+            db.commit()
     else:
         return 'NOT OK'
     return 'OK'
@@ -133,11 +133,14 @@ def product_edit():
 @api_bp.route('/product/delete/<int:product_id>')
 def product_delete(product_id):
     db = get_db()
-    with db.cursor() as cur:
-        cur.execute("delete from product_ware where product_id= %s ;", (product_id,))
-        db.commit()
-        cur.execute("delete from product where id= %s", (product_id,))
-        db.commit()
+    try:
+        with db.cursor() as cur:
+            cur.execute("delete from product_ware where product_id= %s ;", (product_id,))
+            db.commit()
+            cur.execute("delete from product where id= %s", (product_id,))
+            db.commit()
+    except:
+        abort(500, description="product was ordered , Unable to delete ordered products!")
     return "OK"
 
 
@@ -153,11 +156,14 @@ def warehouse_list():
 @api_bp.route('/warehouse/add', methods=['POST'])
 def warehouse_add():
     if request.method == 'POST' and request.form["nameWH"]:
-        name = request.form["nameWH"]
-        db = get_db()
-        with db.cursor() as cur:
-            cur.execute("insert into warehouse(warehouse_name) values(%s);", (name,))
-            db.commit()
+        try:
+            name = request.form["nameWH"]
+            db = get_db()
+            with db.cursor() as cur:
+                cur.execute("insert into warehouse(warehouse_name) values(%s);", (name,))
+                db.commit()
+        except:
+            abort(500)
     else:
         return 'NOT OK'
     return 'OK'
@@ -166,11 +172,15 @@ def warehouse_add():
 @api_bp.route('/warehouse/edit', methods=['POST'])
 def warehouse_edit():
     if request.method == 'POST' and request.form["nameModify"]:
-        ware_id, modified_name = request.form["rowId"], request.form["nameModify"]
-        db = get_db()
-        with db.cursor() as cur:
-            cur.execute("update warehouse set warehouse_name = %s where warehouse_id=%s;", (modified_name, ware_id,))
-            db.commit()
+        try:
+            ware_id, modified_name = request.form["rowId"], request.form["nameModify"]
+            db = get_db()
+            with db.cursor() as cur:
+                cur.execute("update warehouse set warehouse_name = %s where warehouse_id=%s;",
+                            (modified_name, ware_id,))
+                db.commit()
+        except:
+            abort(500)
     else:
         return 'NOT OK'
     return 'OK'
@@ -222,7 +232,7 @@ def inventory_price_add():
             product_id, ware_id, number, price = request.form["pro_id"], request.form["ware_id"], \
                                                  request.form["number"], request.form["price"]
             for i in [product_id, ware_id, number, price]:
-                if not isinstance(i, int):
+                if int(i) < 0:
                     raise ValueError
             db = get_db()
             with db.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
@@ -242,7 +252,7 @@ def inventory_price_edit():
             pro_id, price, number, ware_id = request.form["product_id"], request.form["new_price"], \
                                              request.form["new-inventory"], request.form["ware_id"]
             for i in [pro_id, price, number, ware_id]:
-                if not isinstance(i, int):
+                if int(i) < 0:
                     raise ValueError
             db = get_db()
             with db.cursor() as cur:
@@ -278,6 +288,22 @@ def order_list():
         for i in data:
             i['order_time'] = JalaliDate(i['order_time']).isoformat().replace('-', '/')
             i['total_cost'] = '{:,d}'.format(int(i['total_cost']))
+        return jsonify(data)
+
+
+@api_bp.route('/order/table/<int:order_id>')
+def order_table(order_id):
+    db = get_db()
+    with db.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+        cur.execute("select pw.id pro_ware_id, pr.id pro_id, pr.product_name, pw.price, wh.warehouse_name, pw.number "
+                    "from cart ct "
+                    "join product_ware pw on ct.pro_ware_id =  pw.id "
+                    "join warehouse wh on pw.ware_id = wh.warehouse_id "
+                    "join product pr on pw.product_id = pr.id "
+                    "where order_id = %s;", (order_id,))
+        data = cur.fetchall()
+        for i in data:
+            i['price'] = '{:,d}'.format(int(i['price']))
         return jsonify(data)
 
 

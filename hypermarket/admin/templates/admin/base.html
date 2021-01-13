@@ -30,14 +30,14 @@
     {% endblock %}
     {% block extra_script %}{% endblock %}
     <div class="w-25" id="alert-success">
-        <div class="alert alert-success text-center show" role="alert">
+        <div class="alert alert-success text-center show" id="done" role="alert">
           <i class="fa fa-check-circle" aria-hidden="true"></i>
           عمليات با موفقيت انجام شد.
         </div>
     </div>
 
     <div class="w-25" id="alert-error">
-        <div class="alert alert-danger text-center show" role="alert">
+        <div class="alert alert-danger text-center show" id="fail" role="alert">
           <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
           درخواست شما با خطا مواجه شد!
         </div>

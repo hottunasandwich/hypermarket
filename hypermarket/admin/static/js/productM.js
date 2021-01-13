@@ -29,7 +29,10 @@ function deleteAction() {
     var funcUrl= url2 + $delButton.attr("id")
     $("#final-del").click(function(){
         $.get(funcUrl.replace('D',''), () => $delButton.closest('tr').remove())
-        alertSuccess()
+        .done(alertSuccess)
+        .fail(function(jqXHR, textStatus, errorThrown){
+            alertError()
+        })
     })
 }
 
@@ -63,7 +66,6 @@ $(function() {
     $("#final-pro-add").click(function(e) {
         var formData = new FormData($('#add-form')[0])
         if ($("#pro-add").val() && $("#cat-add").val()) {
-            e.preventDefault()
             $("#final-pro-add").attr("data-dismiss", "modal")
             $.ajax({
             type: 'POST',
@@ -73,7 +75,9 @@ $(function() {
             cache: false,
             processData: false,
             success: function(data) {
+                alertSuccess()
                 makeTable(url1)
+                e.preventDefault()
             }
         }).fail(function() {
                 alertError()
