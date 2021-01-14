@@ -37,7 +37,7 @@ function orderDetail(){
             $table += "<tr><td><a href='"+ url4+ i.pro_id +"'>"+ i.product_name + "</a></td>"
             $table += "<td>"+ i.price + "</td>"
             $table += "<td>"+ i.warehouse_name + "</td>"
-            $table += "<td>"+ i.number + "</td></tr>"
+            $table += "<td>"+ i.count + "</td></tr>"
         })
         $table += "</table>"
         var $rowOption = $('.ord-table').append($table)

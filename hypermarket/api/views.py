@@ -319,7 +319,7 @@ def order_list():
 def order_table(order_id):
     db = get_db()
     with db.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-        cur.execute("select pw.id pro_ware_id, pr.id pro_id, pr.product_name, pw.price, wh.warehouse_name, pw.number "
+        cur.execute("select pw.id pro_ware_id, pr.id pro_id, pr.product_name, pw.price, wh.warehouse_name, count "
                     "from cart ct "
                     "join product_ware pw on ct.pro_ware_id =  pw.id "
                     "join warehouse wh on pw.ware_id = wh.warehouse_id "
@@ -341,7 +341,7 @@ def order_details(order_id):
         for i in data:
             # Convert christian date into Persian date.
             i['order_time'], i['delivery_time'] = JalaliDate(i['order_time']).isoformat().replace('-', '/'), \
-                                                  JalaliDate(i['order_time']).isoformat().replace('-', '/')
+                                                  JalaliDate(i['delivery_time']).isoformat().replace('-', '/')
 
     return jsonify(data)
 
